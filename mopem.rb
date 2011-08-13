@@ -15,3 +15,10 @@ if (ARGV[0] == 'install')
 	app.install(target_version)
 end
 
+if (ARGV[0] == 'update')
+	app.error('please specify a target') if (ARGV.length < 2)
+	target_version = ARGV[1]
+
+	app.update(target_version)
+end
+
