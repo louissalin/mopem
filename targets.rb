@@ -3,7 +3,9 @@ class Target
 				  :module,
 				  :branch,
 				  :tarball_url,
-				  :version
+				  :version,
+				  :source_dir,
+				  :dependencies
 
 	def initialize(src = :from_tarball)
 		@src = src
@@ -33,6 +35,7 @@ class TargetFetcher
 		target.repository = "#{GIT_BASE}/mono.git"
 		target.branch = 'master'
 		target.version = 'master-HEAD'
+		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
 
 		target
 	end
@@ -43,6 +46,7 @@ class TargetFetcher
 		target.repository = "#{GIT_BASE}/mono.git"
 		target.branch = 'mono-2-10'
 		target.version = '2.10-HEAD'
+		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
 
 		target
 	end
