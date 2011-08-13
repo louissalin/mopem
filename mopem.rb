@@ -12,6 +12,6 @@ if (ARGV[0] == 'install')
 	app.error('please specify a target') if (ARGV.length < 2)
 	target_version = ARGV[1]
 
-	app.fetch(target_version)
+	app.install(target_version)
 end
 

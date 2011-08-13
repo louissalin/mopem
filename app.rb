@@ -21,8 +21,20 @@ class App
 		known_targets().each {|target_version| puts target_version}
 	end
 
-	def fetch(target_version)
+	def install(target_version)
 		validate_target(target_version)
+
+		target = @target_fetcher.get_target(target_version)
+		target_dir = create_source_dir(target)
+
+		if File.directory?("#{target_dir}/#{target.module}/.git")
+			error("target version #{target_version} is already installed")
+		end
+
+		puts "installing..."
+		if !system("cd #{target_dir} && git clone #{target.repository} 1>#{home_dir}/install.log 2>#{home_dir}/error.log")
+			error "error cloning git repo for target #{target_version}. Please check #{home_dir}/error.log for details"
+		end
 	end
 
 	private
@@ -38,10 +50,20 @@ class App
 
 	def known_targets
 		return_val = []
-		@target_fetcher.targets.keys.each do |target_key|
-			return_val.push @target_fetcher.targets[target_key].version
+		@target_fetcher.targets.each do |t|
+			return_val.push t.version
 		end
 
 		return_val
+	end
+
+	def create_source_dir(target)
+		src_dir = "#{home_dir}/sources"
+		Dir.mkdir(src_dir) if !File.directory?(src_dir)
+
+		target_dir = "#{src_dir}/#{target.version}"
+		Dir.mkdir(target_dir) if !File.directory?(target_dir)
+
+		target_dir
 	end
 end
