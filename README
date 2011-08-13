@@ -1,0 +1,34 @@
+Mopem is a Mono parallel environment manager, allowing the user to switch easily between different mono versions. Mopem can be used to install a new environment by tracking the proper branch in the mono repository, dependencies and downloading the needed source, compiling it and installing it in /home. It can then switch environments by changing environment variables and path.
+
+usage:
+
+$ mopem install 2.10
+
+will install the latest in the 2.10 branch
+
+$ mopem install 2.10.1
+
+will install mono 2.10.1
+
+$ mopem install master
+
+will install the HEAD version in the master branch
+
+$ mopem update 2.10.1
+
+will update the branch
+
+$ mopem use 2.10
+$ mopem use master
+
+will switch to the selected environments
+
+$ mopem list 
+
+will list all the installed environments
+
+$ mopem list available
+
+will list all the available environments that could be installed.
+
+Because people will want to maintain forks of certain Mono branches, mopem will read the forked git repository url from a configuration file. It will be up to the user to keep the source tree up to date.
