@@ -32,9 +32,10 @@ class App
 		end
 
 		puts "installing..."
-		if !system("cd #{target_dir} && git clone #{target.repository} 1>#{home_dir}/install.log 2>#{home_dir}/error.log")
-			error "error cloning git repo for target #{target_version}. Please check #{home_dir}/error.log for details"
-		end
+		command "#{target_dir}",
+			    "git clone #{target.repository}",
+				"error cloning git repo for target #{target_version}",
+				true
 	end
 
 	def update(target_version)
@@ -48,24 +49,36 @@ class App
 		end
 
 		puts "updating..."
-		if !system("cd #{target_dir}/#{target.module} && git reset --hard 1>#{home_dir}/install.log 2>#{home_dir}/error.log")
-			error "error reseting git repo for target #{target_version}. Please check #{home_dir}/error.log for details"
-		end
+		command "#{target_dir}/#{target.module}",
+			    "git reset --hard",
+				"error reseting git repo for target #{target_version}",
+				true
 
-		if !system("cd #{target_dir}/#{target.module} && git clean -df 1>#{home_dir}/install.log 2>#{home_dir}/error.log")
-			error "error cleaning git repo for target #{target_version}. Please check #{home_dir}/error.log for details"
-		end
+		command "#{target_dir}/#{target.module}",
+			    "git clean -df",
+				"error cleaning git repo for target #{target_version}"
 
-		if !system("cd #{target_dir}/#{target.module} && git checkout #{target.branch} 1>#{home_dir}/install.log 2>#{home_dir}/error.log")
-			error "error checking out branch #{target.branch}. Please check #{home_dir}/error.log for details"
-		end
+		command "#{target_dir}/#{target.module}",
+			    "git checkout #{target.branch}",
+				"error checking out branch #{target.branch}"
 
-		if !system("cd #{target_dir}/#{target.module} && git pull 1>#{home_dir}/install.log 2>#{home_dir}/error.log")
-			error "error pulling from git repo for target #{target_version}. Please check #{home_dir}/error.log for details"
-		end
+		command "#{target_dir}/#{target.module}",
+				'git pull',
+				 "error pulling from git repo for target #{target_version}"
 	end
 
 	private
+	def command(dir, cmd, error_msg, append_err_msg = true)
+		redirect_symbol = '>'
+		if append_err_msg
+			redirect_symbol = '>>'
+		end
+
+		if !system("cd #{dir} && #{cmd} 1>#{home_dir}/install.log 2#{redirect_symbol}#{home_dir}/error.log")
+			error error_msg + ". Please check #{home_dir}/error.log for details"
+		end
+	end
+
 	def home_dir
 		"#{File.expand_path('~')}/.mopem"
 	end
