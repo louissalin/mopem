@@ -1,3 +1,5 @@
+Warning: this might not work at all for you and it currently only works on OpenSuse
+
 Mopem is a Mono parallel environment manager, allowing the user to switch easily between different mono versions. Mopem can be used to install a new environment by tracking the proper branch in the mono repository, dependencies and downloading the needed source, compiling it and installing it in /home. It can then switch environments by changing environment variables and path.
 
 usage:
