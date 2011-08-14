@@ -47,7 +47,7 @@ class App
 			error("target version #{target_version} is already installed")
 		end
 
-		puts "installing..."
+		puts "fetching sources..."
 		command "#{target_dir}",
 			    "git clone #{target.repository}",
 				"error cloning git repo for target #{target_version}",
