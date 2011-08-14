@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+
+export PATH=$DIR:$MOPEM_PATH:$PATH
+PS1="$MOPEM_PS1$PS1"

@@ -21,6 +21,31 @@ class App
 		known_targets().each {|target_version| puts target_version}
 	end
 
+	def switch(target_version)
+		validate_target(target_version)
+		target = @target_fetcher.get_target(target_version)
+
+		src_dir = "#{home_dir}/sources"
+		target_dir = "#{src_dir}/#{target.version}"
+
+		if !File.exist?("#{target_dir}/mono-environment")
+			error "target version #{target_version} is not installed."
+		end
+
+		mono_prefix = get_mono_prefix(target)
+		gnome_prefix ='/usr'
+
+		ENV['DYLD_LIBRARY_FALLBACK_PATH'] = "#{mono_prefix}/lib:#{ENV['DYLD_LIBRARY_FALLBACK_PATH']}"
+		ENV['LD_LIBRARY_PATH'] = "#{mono_prefix}/lib:#{ENV['LD_LIBRARY_PATH']}"
+		ENV['C_INCLUDE_PATH'] = "#{mono_prefix}/include:#{gnome_prefix}/include"
+		ENV['ACLOCAL_PATH'] = "#{mono_prefix}/share/aclocal"
+		ENV['PKG_CONFIG_PATH'] = "#{mono_prefix}/lib/pkgconfig:#{gnome_prefix}/lib/pkgconfig"
+		ENV['MOPEM_PATH'] = "#{mono_prefix}/bin"
+		ENV['MOPEM_PS1'] = "[mono-#{target.version}] "
+
+		exec '/usr/bin/env bash'
+	end
+
 	def rebuild(target_version)
 		validate_target(target_version)
 		target = @target_fetcher.get_target(target_version)

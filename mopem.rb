@@ -13,6 +13,7 @@ if (ARGV[0] == 'install')
 	target_version = ARGV[1]
 
 	app.install(target_version)
+	exit 0
 end
 
 if (ARGV[0] == 'update')
@@ -20,6 +21,7 @@ if (ARGV[0] == 'update')
 	target_version = ARGV[1]
 
 	app.update(target_version)
+	exit 0
 end
 
 if (ARGV[0] == 'rebuild')
@@ -27,4 +29,16 @@ if (ARGV[0] == 'rebuild')
 	target_version = ARGV[1]
 
 	app.rebuild(target_version)
+	exit 0
 end
+
+if (ARGV[0] == 'use')
+	app.error('please specify a target') if (ARGV.length < 2)
+	target_version = ARGV[1]
+
+	app.switch(target_version)
+	exit 0
+end
+
+app.error 'unkown command'
+exit 1
