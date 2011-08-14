@@ -22,3 +22,9 @@ if (ARGV[0] == 'update')
 	app.update(target_version)
 end
 
+if (ARGV[0] == 'rebuild')
+	app.error('please specify a target') if (ARGV.length < 2)
+	target_version = ARGV[1]
+
+	app.rebuild(target_version)
+end

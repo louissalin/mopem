@@ -21,6 +21,21 @@ class App
 		known_targets().each {|target_version| puts target_version}
 	end
 
+	def rebuild(target_version)
+		validate_target(target_version)
+		target = @target_fetcher.get_target(target_version)
+		target_dir = create_source_dir(target)
+
+		if !File.directory?("#{target_dir}/#{target.module}/.git")
+			error("target version #{target_version} is not installed")
+		end
+
+		puts "rebuilding..."
+		build(target)
+
+		puts "done!"
+	end
+
 	def install(target_version)
 		validate_target(target_version)
 		target = @target_fetcher.get_target(target_version)
@@ -38,6 +53,7 @@ class App
 				"error cloning git repo for target #{target_version}",
 				false
 
+		configure(target)
 		build(target)
 
 		puts "done!"
@@ -72,6 +88,7 @@ class App
 				'git pull',
 				 "error pulling from git repo for target #{target_version}"
 
+		configure(target)
 		build(target)
 
 		puts "done!"
@@ -85,8 +102,12 @@ class App
 		end
 	end
 
+	def get_mono_prefix(target)
+		"#{home_dir}/install/mono-#{target.version}"
+	end
+
 	def create_environment_script(target)
-		mono_prefix = "#{home_dir}/install/mono-#{target.version}"
+		mono_prefix = get_mono_prefix(target)
 		gnome_prefix ='/usr'
 		script_path = target.source_dir + '/mono-environment'
 
@@ -100,18 +121,23 @@ class App
 			f.puts "PS1=\"[mono-#{target.version}] $PS1\""
 		end
 
-		# return command to execute script
+		# return bash command to execute script
 		". #{script_path}"
+	end
+
+	def configure(target)
+		puts "configuring..."
+		mono_prefix = get_mono_prefix(target)
+		env_script_cmd = create_environment_script(target)
+
+		command "#{target.source_dir}/#{target.module}",
+				"#{env_script_cmd} && ./autogen.sh --prefix=#{mono_prefix}",
+				'failed to configure mono'
 	end
 
 	def build(target)
 		puts "making #{target.module}..."
 		env_script_cmd = create_environment_script(target)
-
-		puts "configuring..."
-		command "#{target.source_dir}/#{target.module}",
-				"#{env_script_cmd} && ./autogen.sh --prefix=$MONO_PREFIX",
-				'failed to configure mono'
 
 		puts "compiling..."
 		command "#{target.source_dir}/#{target.module}",
