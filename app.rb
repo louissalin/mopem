@@ -84,34 +84,12 @@ class App
 	def update(target_version)
 		validate_target(target_version)
 		target = @target_fetcher.get_target(target_version)
-
-		@command.error("cannot update from tarball source") unless target.is_from_repository?
 		target_dir = create_source_dir(target)
 
 		install_dependencies(target)
 
-		if !File.directory?("#{target_dir}/#{target.module}/.git")
-			@command.error("target version #{target_version} is not installed")
-		end
-
 		puts "updating..."
-		@command.execute "#{target_dir}/#{target.module}",
-			    "git reset --hard",
-				"error reseting git repo for target #{target_version}",
-				false
-
-		@command.execute "#{target_dir}/#{target.module}",
-			    "git clean -df",
-				"error cleaning git repo for target #{target_version}"
-
-		@command.execute "#{target_dir}/#{target.module}",
-			    "git checkout #{target.branch}",
-				"error checking out branch #{target.branch}"
-
-		@command.execute"#{target_dir}/#{target.module}",
-				'git pull',
-				 "error pulling from git repo for target #{target_version}"
-
+		@git_fetcher.update(target_dir, target)
 		configure(target)
 		build(target)
 
