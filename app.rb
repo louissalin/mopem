@@ -1,18 +1,18 @@
 require File.dirname(__FILE__) + '/targets.rb'
+require File.dirname(__FILE__) + '/git.rb'
+require File.dirname(__FILE__) + '/command.rb'
 
 class App
 	def initialize
 		@target_fetcher = TargetFetcher.new
+		@command = Command.new(home_dir)
+		@git_fetcher = GitFetcher.new(home_dir)
+
 		Dir.mkdir(home_dir) if !File.directory?(home_dir)
 	end
 
 	def help
 		puts "list options here..."
-		exit 1
-	end
-
-	def error(msg)
-		puts 'error: ' + msg
 		exit 1
 	end
 
@@ -29,7 +29,7 @@ class App
 		target_dir = "#{src_dir}/#{target.version}"
 
 		if !File.exist?("#{target_dir}/mono-environment")
-			error "target version #{target_version} is not installed."
+			@command.error "target version #{target_version} is not installed."
 		end
 
 		mono_prefix = get_mono_prefix(target)
@@ -52,7 +52,7 @@ class App
 		target_dir = create_source_dir(target)
 
 		if !File.directory?("#{target_dir}/#{target.module}/.git")
-			error("target version #{target_version} is not installed")
+			@command.error("target version #{target_version} is not installed")
 		end
 
 		puts "rebuilding..."
@@ -68,15 +68,12 @@ class App
 
 		install_dependencies(target)
 
-		if File.directory?("#{target_dir}/#{target.module}/.git")
-			error("target version #{target_version} is already installed")
-		end
-
 		puts "fetching sources..."
-		command "#{target_dir}",
-			    "git clone #{target.repository}",
-				"error cloning git repo for target #{target_version}",
-				false
+		if target.is_from_repository?
+			@git_fetcher.fetch(target_dir, target)
+		else
+			@tarball_fetcher.fetch(target_dir, target)
+		end
 
 		configure(target)
 		build(target)
@@ -87,29 +84,31 @@ class App
 	def update(target_version)
 		validate_target(target_version)
 		target = @target_fetcher.get_target(target_version)
+
+		@command.error("cannot update from tarball source") unless target.is_from_repository?
 		target_dir = create_source_dir(target)
 
 		install_dependencies(target)
 
 		if !File.directory?("#{target_dir}/#{target.module}/.git")
-			error("target version #{target_version} is not installed")
+			@command.error("target version #{target_version} is not installed")
 		end
 
 		puts "updating..."
-		command "#{target_dir}/#{target.module}",
+		@command.execute "#{target_dir}/#{target.module}",
 			    "git reset --hard",
 				"error reseting git repo for target #{target_version}",
 				false
 
-		command "#{target_dir}/#{target.module}",
+		@command.execute "#{target_dir}/#{target.module}",
 			    "git clean -df",
 				"error cleaning git repo for target #{target_version}"
 
-		command "#{target_dir}/#{target.module}",
+		@command.execute "#{target_dir}/#{target.module}",
 			    "git checkout #{target.branch}",
 				"error checking out branch #{target.branch}"
 
-		command "#{target_dir}/#{target.module}",
+		@command.execute"#{target_dir}/#{target.module}",
 				'git pull',
 				 "error pulling from git repo for target #{target_version}"
 
@@ -123,7 +122,7 @@ class App
 	def install_dependencies(target)
 		puts "installing dependencies. This might require you to enter your sudo password"
 		if !system "sudo zypper install -y #{target.dependencies}"
-			error 'failed to install dependencies'
+			@command.error 'failed to install dependencies'
 		end
 	end
 
@@ -155,8 +154,11 @@ class App
 		mono_prefix = get_mono_prefix(target)
 		env_script_cmd = create_environment_script(target)
 
-		command "#{target.source_dir}/#{target.module}",
-				"#{env_script_cmd} && ./autogen.sh --prefix=#{mono_prefix}",
+		configure_cmd = './autogen.sh' if target.is_from_repository?
+		configure_cmd = './configure' if target.is_tarball?
+
+		@command.execute "#{target.source_dir}/#{target.module}",
+				"#{env_script_cmd} && #{configure_cmd} --prefix=#{mono_prefix}",
 				'failed to configure mono'
 	end
 
@@ -165,25 +167,14 @@ class App
 		env_script_cmd = create_environment_script(target)
 
 		puts "compiling..."
-		command "#{target.source_dir}/#{target.module}",
+		@command.execute "#{target.source_dir}/#{target.module}",
 				"#{env_script_cmd} && make",
 				'failed to compile mono'
 
 		puts "installing..."
-		command "#{target.source_dir}/#{target.module}",
+		@command.execute "#{target.source_dir}/#{target.module}",
 				"#{env_script_cmd} && make install",
 				'failed to install mono'
-	end
-
-	def command(dir, cmd, error_msg, append_err_msg = true)
-		redirect_symbol = '>'
-		if append_err_msg
-			redirect_symbol = '>>'
-		end
-
-		if !system("cd #{dir} && #{cmd} 1#{redirect_symbol}#{home_dir}/install.log 2>#{home_dir}/error.log")
-			error error_msg + ". Please check #{home_dir}/error.log for details"
-		end
 	end
 
 	def home_dir
@@ -192,7 +183,7 @@ class App
 
 	def validate_target(target_version)
 		unless known_targets().include?(target_version)
-			error "target version #{target_version} not found"
+			@command.error "target version #{target_version} not found"
 		end
 	end
 
