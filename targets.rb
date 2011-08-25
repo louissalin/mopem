@@ -59,11 +59,11 @@ class TargetFetcher
 		target
 	end
 
-	def create_mono_2_10_3
+	def create_mono_2_10_2
 		target = Target.new
 		target.module = 'mono'
-		target.tarball_url = "....."
-		target.version = '2.10.3'
+		target.tarball_url = "http://ftp.novell.com/pub/mono/sources-stable/mono-2.10.2.tar.bz2"
+		target.version = '2.10.2'
 		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
 
 		target
