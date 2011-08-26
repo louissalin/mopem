@@ -3,6 +3,8 @@ class Target
 				  :module,
 				  :branch,
 				  :tarball_url,
+				  :tarball_filename,
+				  :tarball_extract_folder,
 				  :version,
 				  :source_dir,
 				  :dependencies
@@ -29,6 +31,7 @@ class TargetFetcher
 		@targets = []
 		@targets.push create_mono_HEAD_target
 		@targets.push create_mono_2_10_HEAD_target
+		@targets.push create_mono_2_10_2
 	end
 
 	def get_target(version)
@@ -62,7 +65,9 @@ class TargetFetcher
 	def create_mono_2_10_2
 		target = Target.new
 		target.module = 'mono'
-		target.tarball_url = "http://ftp.novell.com/pub/mono/sources-stable/mono-2.10.2.tar.bz2"
+		target.tarball_url = "http://ftp.novell.com/pub/mono/sources/mono"
+		target.tarball_filename = "mono-2.10.2.tar.bz2"
+		target.tarball_extract_folder = "mono-2.10.2"
 		target.version = '2.10.2'
 		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
 

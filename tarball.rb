@@ -1,23 +1,53 @@
-require File.dirname(__FILE__) + '/command.rb'
+require File.dirname(__FILE__) + '/utils.rb'
 
 class TarballFetcher
 	def initialize(home_dir)
-		@command = Command.new(home_dir)
+		@utils = Utils.new(home_dir)
 	end
 
 	def fetch(target_dir, target)
 		if File.directory?("#{target_dir}/#{target.module}")
-			@command.error("target version #{target.version} is already installed")
+			@utils.error("target version #{target.version} is already installed")
 		end
 
-		@command.execute "#{target_dir}",
-			    "wget #{target.tarball_url}",
-				"error fetching tarball for target #{target_version}",
-				false
+		if !File.exists?("#{target_dir}/#{target.tarball_filename}")
+			@utils.command "#{target_dir}",
+					"wget #{target.tarball_url}/#{target.tarball_filename}",
+					"error fetching tarball for target #{target.version}",
+					true
+		end
 
-		@command.execute "#{target_dir}",
-			    "tar xzvf #{target.tarball_url} mono",
-				"error unarchiving tarball for target #{target_version}",
-				false
+		if !File.directory?("#{target_dir}/#{target.tarball_extract_folder}")
+			@utils.command "#{target_dir}",
+					"tar xvjf #{target.tarball_filename}",
+					"error unarchiving tarball for target #{target.version}",
+					true
+		end
+	end
+
+	def configure(target)
+		puts "configuring..."
+		mono_prefix = @utils.get_mono_prefix(target)
+		env_script_cmd = @utils.create_environment_script(target)
+
+		configure_cmd = './configure'
+		@utils.command "#{target.source_dir}/#{target.tarball_extract_folder}",
+				"#{env_script_cmd} && #{configure_cmd} --prefix=#{mono_prefix}",
+				'failed to configure mono'
+	end
+
+	def build(target)
+		puts "making #{target.module}..."
+		env_script_cmd = @utils.create_environment_script(target)
+
+		puts "compiling..."
+		@utils.command "#{target.source_dir}/#{target.tarball_extract_folder}",
+				"#{env_script_cmd} && make",
+				'failed to compile mono'
+
+		puts "installing..."
+		@utils.command "#{target.source_dir}/#{target.tarball_extract_folder}",
+				"#{env_script_cmd} && make install",
+				'failed to install mono'
 	end
 end
