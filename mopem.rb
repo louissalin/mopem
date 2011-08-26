@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/app.rb'
+require File.dirname(__FILE__) + '/utils.rb'
 
 app = App.new
+utils = Utils.new
 app.help if (ARGV.length == 0)
 
 if (ARGV[0] == 'list')
@@ -9,7 +11,7 @@ if (ARGV[0] == 'list')
 end
 
 if (ARGV[0] == 'install')
-	app.error('please specify a target') if (ARGV.length < 2)
+	utils.error('please specify a target') if (ARGV.length < 2)
 	target_version = ARGV[1]
 
 	app.install(target_version)
@@ -17,7 +19,7 @@ if (ARGV[0] == 'install')
 end
 
 if (ARGV[0] == 'update')
-	app.error('please specify a target') if (ARGV.length < 2)
+	utils.error('please specify a target') if (ARGV.length < 2)
 	target_version = ARGV[1]
 
 	app.update(target_version)
@@ -25,7 +27,7 @@ if (ARGV[0] == 'update')
 end
 
 if (ARGV[0] == 'rebuild')
-	app.error('please specify a target') if (ARGV.length < 2)
+	utils.error('please specify a target') if (ARGV.length < 2)
 	target_version = ARGV[1]
 
 	app.rebuild(target_version)
@@ -33,12 +35,12 @@ if (ARGV[0] == 'rebuild')
 end
 
 if (ARGV[0] == 'use')
-	app.error('please specify a target') if (ARGV.length < 2)
+	utils.error('please specify a target') if (ARGV.length < 2)
 	target_version = ARGV[1]
 
 	app.switch(target_version)
 	exit 0
 end
 
-app.error 'unkown command'
+utils.error 'unkown command'
 exit 1

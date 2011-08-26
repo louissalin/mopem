@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/targets.rb'
 
 class Utils
-	def initialize(home_dir)
+	def initialize(home_dir = nil)
 		@home_dir = home_dir
 	end
 
