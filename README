@@ -18,13 +18,25 @@ and change [cloned repo location] with the location where you cloned the repo.
 
 USAGE:
 
-$ ruby mopem.rb install 2.10-HEAD
+$ ruby mopem.rb list 
+
+will list all the available environments
+
+$ ruby mopem.rb install mono 2.10-HEAD
 
 will install the latest in the 2.10 branch
 
-$ ruby mopem.rb install master-HEAD
+$ ruby mopem.rb install mono 2.10.5
+
+will install the 2.10.5 version from 2.10.5
+
+$ ruby mopem.rb install mono master-HEAD
 
 will install the HEAD version in the master branch
+
+$ ruby mopem.rb install gtk-sharp 2.12.11
+
+will install gtk-sharp version 2.12.11. Note: you must have selected a mono runtime first.
 
 $ ruby mopem.rb update 2.10-HEAD
 
@@ -32,10 +44,7 @@ will update the branch
 
 $ ruby mopem.rb use 2.10-HEAD
 $ ruby mopem.rb use master-HEAD
+$ ruby mopem.rb use 2.10.5
 
 will switch to the selected environments by launching a new shell withing the existing one. I plan to replace the current shell at some point, but this isn't what it's doing at the moment.
-
-$ ruby mopem.rb list 
-
-will list all the available environments
 
