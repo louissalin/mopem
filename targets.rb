@@ -6,8 +6,8 @@ class Target
 				  :tarball_filename,
 				  :tarball_extract_folder,
 				  :version,
-				  :source_dir,
-				  :dependencies
+				  :dependencies,
+				  :use_configure
 
 	def initialize(src = :from_tarball)
 		@src = src
@@ -20,6 +20,27 @@ class Target
 	def is_from_repository?
 		return @src == :from_repository
 	end
+
+	def source_dir(home_dir)
+		@source_dir || create_source_dir(home_dir)
+	end
+
+	private
+	def create_source_dir(home_dir)
+		src_dir = "#{home_dir}/sources"
+		Dir.mkdir(src_dir) if !File.directory?(src_dir)
+
+		target_dir = if @module == 'mono' 
+					     "#{src_dir}/#{@version}"
+					 else
+					     "#{src_dir}/#{@module}_#{@version}"
+					 end
+
+		Dir.mkdir(target_dir) if !File.directory?(target_dir)
+
+		@source_dir = target_dir
+		target_dir
+	end
 end
 
 class TargetFetcher
@@ -29,13 +50,16 @@ class TargetFetcher
 
 	def initialize
 		@targets = []
+		#TODO: this is a great opportunity for meta programming!
 		@targets.push create_mono_HEAD_target
 		@targets.push create_mono_2_10_HEAD_target
-		@targets.push create_mono_2_10_2
+		@targets.push create_mono_2_10_4_target
+		@targets.push create_mono_2_10_5_target
+		@targets.push create_gtk_sharp_2_12_11_target
 	end
 
-	def get_target(version)
-		@targets.each {|t| return t if t.version == version}
+	def get_target(mod, version)
+		@targets.each {|t| return t if t.version == version and t.module == mod}
 		nil
 	end
 
@@ -47,6 +71,7 @@ class TargetFetcher
 		target.branch = 'master'
 		target.version = 'master-HEAD'
 		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
+		target.use_configure = false
 
 		target
 	end
@@ -58,19 +83,47 @@ class TargetFetcher
 		target.branch = 'mono-2-10'
 		target.version = '2.10-HEAD'
 		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
+		target.use_configure = false
 
 		target
 	end
 
-	def create_mono_2_10_2
+	def create_mono_2_10_4_target
 		target = Target.new
 		target.module = 'mono'
-		target.tarball_url = "http://ftp.novell.com/pub/mono/sources/mono"
-		target.tarball_filename = "mono-2.10.2.tar.bz2"
-		target.tarball_extract_folder = "mono-2.10.2"
-		target.version = '2.10.2'
+		target.tarball_url = "http://download.mono-project.com/sources/mono/"
+		target.tarball_filename = "mono-2.10.4.tar.bz2"
+		target.tarball_extract_folder = "mono-2.10.4"
+		target.version = '2.10.4'
 		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
+		target.use_configure = true
 
+		target
+	end
+
+	def create_mono_2_10_5_target
+		target = Target.new
+		target.module = 'mono'
+		target.tarball_url = "http://download.mono-project.com/sources/mono/"
+		target.tarball_filename = "mono-2.10.5.tar.bz2"
+		target.tarball_extract_folder = "mono-2.10.5"
+		target.version = '2.10.5'
+		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
+		target.use_configure = true
+
+		target
+	end
+
+	def create_gtk_sharp_2_12_11_target
+		target = Target.new
+		target.module = 'gtk-sharp'
+		target.tarball_url = "http://download.mono-project.com/sources/gtk-sharp212/"
+		target.tarball_filename = "gtk-sharp-2.12.11.tar.bz2"
+		target.tarball_extract_folder = "gtk-sharp-2.12.11"
+		target.version = '2.12.11'
+		target.dependencies = 'gtk2-devel'
+		target.use_configure = true
+		 
 		target
 	end
 end

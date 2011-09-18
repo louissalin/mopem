@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/utils.rb'
 class GitFetcher
 	def initialize(home_dir)
 		@utils = Utils.new(home_dir)
+		@home_dir = home_dir
 	end
 
 	def fetch(target_dir, target)
@@ -12,7 +13,7 @@ class GitFetcher
 
 		@utils.command "#{target_dir}",
 			    "git clone #{target.repository}",
-				"error cloning git repo for target #{target_version}",
+				"error cloning git repo for target #{target.version}",
 				false
 	end
 
@@ -44,27 +45,28 @@ class GitFetcher
 	def configure(target)
 		puts "configuring..."
 		mono_prefix = @utils.get_mono_prefix(target)
-		env_script_cmd = @utils.create_environment_script(target)
+		env_script_cmd = @utils.get_or_create_envirnment_script(target)
 
 		configure_cmd = './autogen.sh'
-		@utils.command "#{target.source_dir}/#{target.module}",
+		configure_cmd = './configure' if target.use_configure
+
+		@utils.command "#{target.source_dir(@home_dir)}/#{target.module}",
 				"#{env_script_cmd} && #{configure_cmd} --prefix=#{mono_prefix}",
 				'failed to configure mono'
 	end
 
 	def build(target)
 		puts "making #{target.module}..."
-		env_script_cmd = @utils.create_environment_script(target)
+		env_script_cmd = @utils.get_or_create_envirnment_script(target)
 
 		puts "compiling..."
-		@utils.command "#{target.source_dir}/#{target.module}",
+		@utils.command "#{target.source_dir(@home_dir)}/#{target.module}",
 				"#{env_script_cmd} && make",
 				'failed to compile mono'
 
 		puts "installing..."
-		@utils.command "#{target.source_dir}/#{target.module}",
+		@utils.command "#{target.source_dir(@home_dir)}/#{target.module}",
 				"#{env_script_cmd} && make install",
 				'failed to install mono'
 	end
-
 end

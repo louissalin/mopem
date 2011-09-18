@@ -11,10 +11,12 @@ if (ARGV[0] == 'list')
 end
 
 if (ARGV[0] == 'install')
-	utils.error('please specify a target') if (ARGV.length < 2)
-	target_version = ARGV[1]
+	utils.error('please specify a module (mono, gtk-sharp, monodevelop, etc...)') if (ARGV.length < 2)
+	utils.error('please specify a version') if (ARGV.length < 3)
+	mod = ARGV[1]
+	target_version = ARGV[2]
 
-	app.install(target_version)
+	app.install(mod, target_version)
 	exit 0
 end
 
@@ -23,14 +25,6 @@ if (ARGV[0] == 'update')
 	target_version = ARGV[1]
 
 	app.update(target_version)
-	exit 0
-end
-
-if (ARGV[0] == 'rebuild')
-	utils.error('please specify a target') if (ARGV.length < 2)
-	target_version = ARGV[1]
-
-	app.rebuild(target_version)
 	exit 0
 end
 

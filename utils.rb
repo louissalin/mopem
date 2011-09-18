@@ -23,13 +23,33 @@ class Utils
 	end
 
 	def get_mono_prefix(target)
-		"#{@home_dir}/install/mono-#{target.version}"
+		if target.module == 'mono'
+			"#{@home_dir}/install/mono-#{target.version}"
+		else
+			mono_target = get_mono_target
+			"#{@home_dir}/install/mono-#{mono_target.version}"
+		end
+	end
+
+	def get_or_create_envirnment_script(target)
+		if target.module == 'mono'
+			create_environment_script(target)
+		else
+			get_current_environment_script
+		end
+	end
+
+	private
+	def get_current_environment_script
+		mono_target = get_mono_target
+		script_path = mono_target.source_dir(@home_dir) + '/mono-environment'
+		". #{script_path}"
 	end
 
 	def create_environment_script(target)
 		mono_prefix = get_mono_prefix(target)
 		gnome_prefix ='/usr'
-		script_path = target.source_dir + '/mono-environment'
+		script_path = target.source_dir(@home_dir) + '/mono-environment'
 
 		File.open(script_path, 'w') do |f|
 			f.puts "export DYLD_LIBRARY_FALLBACK_PATH=#{mono_prefix}/lib:$DYLD_LIBRARY_FALLBACK_PATH"
@@ -45,4 +65,12 @@ class Utils
 		". #{script_path}"
 	end
 
+	def get_mono_target
+		current_mono_version = ENV['MOPEM_CURRENT_MONO_VERSION']
+		if current_mono_version == nil 
+			error 'please use a mono target before installing other targets' 
+		end
+
+		TargetFetcher.new.get_target('mono', current_mono_version)
+	end
 end

@@ -20,12 +20,14 @@ class App
 
 	def list_known_targets
 		puts "available targets:"
-		known_targets().each {|target_version| puts target_version}
+		@target_fetcher.targets.each do |t|
+			puts "#{t.module}, version #{t.version}"
+		end
 	end
 
 	def switch(target_version)
-		validate_target(target_version)
-		target = @target_fetcher.get_target(target_version)
+		validate_target('mono', target_version)
+		target = @target_fetcher.get_target('mono', target_version)
 
 		src_dir = "#{home_dir}/sources"
 		target_dir = "#{src_dir}/#{target.version}"
@@ -44,39 +46,24 @@ class App
 		ENV['PKG_CONFIG_PATH'] = "#{mono_prefix}/lib/pkgconfig:#{gnome_prefix}/lib/pkgconfig"
 		ENV['MOPEM_PATH'] = "#{mono_prefix}/bin"
 		ENV['MOPEM_PS1'] = "[mono-#{target.version}] "
+		ENV['MOPEM_CURRENT_MONO_VERSION'] = "#{target.version}"
 
 		exec '/usr/bin/env bash'
 	end
 
-	def rebuild(target_version)
-		validate_target(target_version)
-		target = @target_fetcher.get_target(target_version)
-		target_dir = create_source_dir(target)
-
-		if !File.directory?("#{target_dir}/#{target.module}/.git")
-			@utils.error("target version #{target_version} is not installed")
-		end
-
-		puts "rebuilding..."
-		build(target)
-
-		puts "done!"
-	end
-
-	def install(target_version)
-		validate_target(target_version)
-		target = @target_fetcher.get_target(target_version)
-		target_dir = create_source_dir(target)
+	def install(mod, target_version)
+		validate_target(mod, target_version)
+		target = @target_fetcher.get_target(mod, target_version)
 
 		install_dependencies(target)
 
 		puts "fetching sources..."
 		if target.is_from_repository?
-			@git_fetcher.fetch(target_dir, target)
+			@git_fetcher.fetch(target.source_dir(home_dir), target)
 			@git_fetcher.configure(target)
 			@git_fetcher.build(target)
 		else
-			@tarball_fetcher.fetch(target_dir, target)
+			@tarball_fetcher.fetch(target.source_dir(home_dir), target)
 			@tarball_fetcher.configure(target)
 			@tarball_fetcher.build(target)
 		end
@@ -87,12 +74,15 @@ class App
 	def update(target_version)
 		validate_target(target_version)
 		target = @target_fetcher.get_target(target_version)
-		target_dir = create_source_dir(target)
+
+		if is_tarball?
+			@utils.error 'cannot update a tarball install. This works only for HEAD versions' 
+		end
 
 		install_dependencies(target)
 
 		puts "updating..."
-		@git_fetcher.update(target_dir, target)
+		@git_fetcher.update(target.source_dir(home_dir), target)
 		configure(target)
 		build(target)
 
@@ -111,29 +101,11 @@ class App
 		"#{File.expand_path('~')}/.mopem"
 	end
 
-	def validate_target(target_version)
-		unless known_targets().include?(target_version)
-			@utils.error "target version #{target_version} not found"
-		end
-	end
-
-	def known_targets
-		return_val = []
+	def validate_target(mod, target_version)
 		@target_fetcher.targets.each do |t|
-			return_val.push t.version
+			return if t.version == target_version and t.module == mod
 		end
 
-		return_val
-	end
-
-	def create_source_dir(target)
-		src_dir = "#{home_dir}/sources"
-		Dir.mkdir(src_dir) if !File.directory?(src_dir)
-
-		target_dir = "#{src_dir}/#{target.version}"
-		Dir.mkdir(target_dir) if !File.directory?(target_dir)
-
-		target.source_dir = target_dir
-		target_dir
+		@utils.error "couldn't find #{mod} version #{target_version}"
 	end
 end

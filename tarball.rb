@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/utils.rb'
 class TarballFetcher
 	def initialize(home_dir)
 		@utils = Utils.new(home_dir)
+		@home_dir = home_dir
 	end
 
 	def fetch(target_dir, target)
@@ -28,26 +29,27 @@ class TarballFetcher
 	def configure(target)
 		puts "configuring..."
 		mono_prefix = @utils.get_mono_prefix(target)
-		env_script_cmd = @utils.create_environment_script(target)
+		env_script_cmd = @utils.get_or_create_envirnment_script(target)
 
 		configure_cmd = './configure'
-		@utils.command "#{target.source_dir}/#{target.tarball_extract_folder}",
+		@utils.command "#{target.source_dir(@home_dir)}/#{target.tarball_extract_folder}",
 				"#{env_script_cmd} && #{configure_cmd} --prefix=#{mono_prefix}",
-				'failed to configure mono'
+				"failed to configure #{target.module}"
 	end
 
 	def build(target)
 		puts "making #{target.module}..."
-		env_script_cmd = @utils.create_environment_script(target)
+
+		env_script_cmd = @utils.get_or_create_envirnment_script(target)
 
 		puts "compiling..."
-		@utils.command "#{target.source_dir}/#{target.tarball_extract_folder}",
+		@utils.command "#{target.source_dir(@home_dir)}/#{target.tarball_extract_folder}",
 				"#{env_script_cmd} && make",
-				'failed to compile mono'
+				"failed to compile #{target.module}"
 
 		puts "installing..."
-		@utils.command "#{target.source_dir}/#{target.tarball_extract_folder}",
+		@utils.command "#{target.source_dir(@home_dir)}/#{target.tarball_extract_folder}",
 				"#{env_script_cmd} && make install",
-				'failed to install mono'
+				"failed to install #{target.module}"
 	end
 end
