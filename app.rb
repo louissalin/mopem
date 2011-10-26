@@ -14,7 +14,8 @@ class App
 	end
 
 	def help
-		puts "list options here..."
+		puts "usage:"
+		puts "ruby mopem.rb [list | install <module> <target> | update <target> | use <target>"
 		exit 1
 	end
 
@@ -91,6 +92,7 @@ class App
 
 	private
 	def install_dependencies(target)
+		return if target.dependencies == nil
 		puts "installing dependencies. This might require you to enter your sudo password"
 		if !system "sudo zypper install -y #{target.dependencies}"
 			@utils.error 'failed to install dependencies'

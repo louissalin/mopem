@@ -39,7 +39,6 @@ class TarballFetcher
 
 	def build(target)
 		puts "making #{target.module}..."
-
 		env_script_cmd = @utils.get_or_create_envirnment_script(target)
 
 		puts "compiling..."
@@ -48,8 +47,9 @@ class TarballFetcher
 				"failed to compile #{target.module}"
 
 		puts "installing..."
+		sudo_cmd = target.install_as_root ? 'sudo' : ''
 		@utils.command "#{target.source_dir(@home_dir)}/#{target.tarball_extract_folder}",
-				"#{env_script_cmd} && make install",
+				"#{env_script_cmd} && #{sudo_cmd} make install",
 				"failed to install #{target.module}"
 	end
 end

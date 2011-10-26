@@ -11,7 +11,7 @@ class Utils
 			redirect_symbol = '>>'
 		end
 
-		#puts "cd #{dir} && #{cmd} 1#{redirect_symbol}#{@home_dir}/install.log 2>#{@home_dir}/error.log"
+		puts "cd #{dir} && #{cmd} 1#{redirect_symbol}#{@home_dir}/install.log 2>#{@home_dir}/error.log"
 		if !system("cd #{dir} && #{cmd} 1#{redirect_symbol}#{@home_dir}/install.log 2>#{@home_dir}/error.log")
 			error error_msg + ". Please check #{@home_dir}/error.log for details"
 		end

@@ -48,8 +48,6 @@ class GitFetcher
 		env_script_cmd = @utils.get_or_create_envirnment_script(target)
 
 		configure_cmd = './autogen.sh'
-		configure_cmd = './configure' if target.use_configure
-
 		@utils.command "#{target.source_dir(@home_dir)}/#{target.module}",
 				"#{env_script_cmd} && #{configure_cmd} --prefix=#{mono_prefix}",
 				'failed to configure mono'

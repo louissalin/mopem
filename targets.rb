@@ -7,10 +7,12 @@ class Target
 				  :tarball_extract_folder,
 				  :version,
 				  :dependencies,
-				  :use_configure
+				  :use_configure,
+				  :install_as_root
 
 	def initialize(src = :from_tarball)
 		@src = src
+		@install_as_root = false
 	end
 
 	def is_tarball?
@@ -56,6 +58,10 @@ class TargetFetcher
 		@targets.push create_mono_2_10_4_target
 		@targets.push create_mono_2_10_5_target
 		@targets.push create_gtk_sharp_2_12_11_target
+		@targets.push create_libgdiplus_2_10_target
+		@targets.push create_xsp_2_10_2_target
+		@targets.push create_mod_mono_2_10_target
+		@targets.push create_mono_addins_0_6_2_target
 	end
 
 	def get_target(mod, version)
@@ -122,6 +128,59 @@ class TargetFetcher
 		target.tarball_extract_folder = "gtk-sharp-2.12.11"
 		target.version = '2.12.11'
 		target.dependencies = 'gtk2-devel'
+		target.use_configure = true
+		 
+		target
+	end
+
+	def create_libgdiplus_2_10_target
+		target = Target.new
+		target.module = 'libgdiplus'
+		target.tarball_url = "http://download.mono-project.com/sources/libgdiplus/"
+		target.tarball_filename = "libgdiplus-2.10.tar.bz2"
+		target.tarball_extract_folder = "libgdiplus-2.10"
+		target.version = '2.10'
+		target.dependencies = 'freetype2-devel fontconfig-devel libpng14-devel'
+		target.use_configure = true
+		 
+		target
+	end
+
+	def create_xsp_2_10_2_target
+		target = Target.new
+		target.module = 'xsp'
+		target.tarball_url = "http://download.mono-project.com/sources/xsp/"
+		target.tarball_filename = "xsp-2.10.2.tar.bz2"
+		target.tarball_extract_folder = "xsp-2.10.2"
+		target.version = '2.10.2'
+		target.dependencies = nil
+		target.use_configure = true
+		 
+		target
+	end
+
+	def create_mod_mono_2_10_target
+		target = Target.new
+		target.module = 'mod_mono'
+		target.tarball_url = "http://download.mono-project.com/sources/mod_mono/"
+		target.tarball_filename = "mod_mono-2.10.tar.bz2"
+		target.tarball_extract_folder = "mod_mono-2.10"
+		target.version = '2.10'
+		target.dependencies = 'apache2-devel'
+		target.use_configure = true
+		target.install_as_root = true
+		 
+		target
+	end
+
+	def create_mono_addins_0_6_2_target
+		target = Target.new
+		target.module = 'mono-addins'
+		target.tarball_url = "http://download.mono-project.com/sources/mono-addins/"
+		target.tarball_filename = "mono-addins-0.6.2.tar.bz2"
+		target.tarball_extract_folder = "mono-addins-0.6.2"
+		target.version = '0.6.2'
+		target.dependencies = nil
 		target.use_configure = true
 		 
 		target
