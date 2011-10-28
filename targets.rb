@@ -129,6 +129,9 @@ class TargetFetcher
 		target.version = '2.12.11'
 		target.dependencies = 'gtk2-devel'
 		target.use_configure = true
+
+		#TODO: add verify_install method to target that knows how to check if this is installed
+		#      (check in the lib folder of current mono install)
 		 
 		target
 	end
@@ -183,6 +186,23 @@ class TargetFetcher
 		target.dependencies = nil
 		target.use_configure = true
 		 
+		target
+	end
+
+	def create_monodevelop_2_8_target
+		target = Target.new
+		target.module = 'monodevelop'
+		target.tarball_url = "http://download.mono-project.com/sources/monodevelop/"
+		target.tarball_filename = "monodevelop-2.8.tar.bz2"
+		target.tarball_extract_folder = "monodevelop-2.8"
+		target.version = '2.8'
+		target.dependencies = nil
+		target.mono_dependencies = {"gtk-sharp" => "2.8.0", 
+									"monodoc" => "1.0",
+									"gecko-sharp2" => "0.10",
+									"gtksourceview-sharp2" => "0.10"}
+		target.use_configure = true
+
 		target
 	end
 end

@@ -56,6 +56,7 @@ class App
 		validate_target(mod, target_version)
 		target = @target_fetcher.get_target(mod, target_version)
 
+		verify_mono_dependencies(target)
 		install_dependencies(target)
 
 		puts "fetching sources..."
@@ -91,6 +92,10 @@ class App
 	end
 
 	private
+	def verify_mono_dependencies(target)
+		#TODO: 	go through target.mono_dependencies, find target and call its verify_install method
+	end
+
 	def install_dependencies(target)
 		return if target.dependencies == nil
 		puts "installing dependencies. This might require you to enter your sudo password"
