@@ -189,19 +189,6 @@ class TargetFetcher
 		target
 	end
 
-	def create_monodoc_2_0_target
-		target = Target.new
-		target.module = 'monodoc'
-		target.tarball_url = "http://download.mono-project.com/sources/monodoc/"
-		target.tarball_filename = "monodoc-2.0.tar.bz2"
-		target.tarball_extract_folder = "monodoc-2.0"
-		target.version = '2.0'
-		target.dependencies = nil
-		target.use_configure = true
-		 
-		target
-	end
-
 	def create_monodevelop_2_8_target
 		target = Target.new
 		target.module = 'monodevelop'
