@@ -93,7 +93,12 @@ class App
 
 	private
 	def verify_mono_dependencies(target)
-		#TODO: 	go through target.mono_dependencies, find target and call its verify_install method
+		target.mono_dependencies.each do |dep|
+			version = `gacutil -l #{dep[0]} | awk 'match($2, /Version=(.*),/, a) {print a[1]}'`
+			if version.length == 0 || version < dep[1]
+				@utils.error "please install target #{dep[0]} version #{dep[1]} first"
+			end
+		end
 	end
 
 	def install_dependencies(target)

@@ -7,12 +7,14 @@ class Target
 				  :tarball_extract_folder,
 				  :version,
 				  :dependencies,
+				  :mono_dependencies,
 				  :use_configure,
 				  :install_as_root
 
 	def initialize(src = :from_tarball)
 		@src = src
 		@install_as_root = false
+		@mono_dependencies = {}
 	end
 
 	def is_tarball?
@@ -62,6 +64,7 @@ class TargetFetcher
 		@targets.push create_xsp_2_10_2_target
 		@targets.push create_mod_mono_2_10_target
 		@targets.push create_mono_addins_0_6_2_target
+		@targets.push create_monodevelop_2_8_target
 	end
 
 	def get_target(mod, version)
@@ -130,9 +133,6 @@ class TargetFetcher
 		target.dependencies = 'gtk2-devel'
 		target.use_configure = true
 
-		#TODO: add verify_install method to target that knows how to check if this is installed
-		#      (check in the lib folder of current mono install)
-		 
 		target
 	end
 
@@ -183,6 +183,19 @@ class TargetFetcher
 		target.tarball_filename = "mono-addins-0.6.2.tar.bz2"
 		target.tarball_extract_folder = "mono-addins-0.6.2"
 		target.version = '0.6.2'
+		target.dependencies = nil
+		target.use_configure = true
+		 
+		target
+	end
+
+	def create_monodoc_2_0_target
+		target = Target.new
+		target.module = 'monodoc'
+		target.tarball_url = "http://download.mono-project.com/sources/monodoc/"
+		target.tarball_filename = "monodoc-2.0.tar.bz2"
+		target.tarball_extract_folder = "monodoc-2.0"
+		target.version = '2.0'
 		target.dependencies = nil
 		target.use_configure = true
 		 
