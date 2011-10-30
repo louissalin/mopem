@@ -1,3 +1,6 @@
+require 'rubygems'
+require 'versionomy'
+
 require File.dirname(__FILE__) + '/targets.rb'
 require File.dirname(__FILE__) + '/git.rb'
 require File.dirname(__FILE__) + '/tarball.rb'
@@ -95,8 +98,16 @@ class App
 	def verify_mono_dependencies(target)
 		target.mono_dependencies.each do |dep|
 			version = `gacutil -l #{dep[0]} | awk 'match($2, /Version=(.*),/, a) {print a[1]}'`
-			if version.length == 0 || version < dep[1]
-				@utils.error "please install target #{dep[0]} version #{dep[1]} first"
+			version = '0.0' if version.length == 0
+
+			found_version = Versionomy.parse(version.gsub(/\n/, ''))
+			needed_version = Versionomy.parse(dep[1][0])
+			if found_version < needed_version
+				if dep[1].length == 1 then 
+					@utils.error "please install target #{dep[0]} version #{dep[1]} first"
+				else
+					@utils.error dep[1][1]
+				end
 			end
 		end
 	end

@@ -65,6 +65,8 @@ class TargetFetcher
 		@targets.push create_mod_mono_2_10_target
 		@targets.push create_mono_addins_0_6_2_target
 		@targets.push create_monodevelop_2_8_target
+		@targets.push create_gnome_desktop_sharp_2_0_target
+		@targets.push create_gecko_sharp_2_0_target
 	end
 
 	def get_target(mod, version)
@@ -189,6 +191,32 @@ class TargetFetcher
 		target
 	end
 
+	def create_gnome_desktop_sharp_2_0_target
+		target = Target.new
+		target.module = 'gnome-desktop-sharp2'
+		target.tarball_url = "http://download.mono-project.com/sources/gnome-desktop-sharp2/"
+		target.tarball_filename = "gnome-desktop-sharp-2.24.0.tar.bz2"
+		target.tarball_extract_folder = "gnome-desktop-sharp-2.24.0"
+		target.version = '2.24.0'
+		target.dependencies = nil
+		target.use_configure = true
+
+		target
+	end
+
+	def create_gecko_sharp_2_0_target
+		target = Target.new
+		target.module = 'gecko-sharp2'
+		target.tarball_url = "http://download.mono-project.com/sources/gecko-sharp2/"
+		target.tarball_filename = "gecko-sharp-2.0-0.13.tar.bz2"
+		target.tarball_extract_folder = "gecko-sharp-2.0-0.13"
+		target.version = '0.13'
+		target.dependencies = nil
+		target.use_configure = true
+
+		target
+	end
+
 	def create_monodevelop_2_8_target
 		target = Target.new
 		target.module = 'monodevelop'
@@ -197,10 +225,10 @@ class TargetFetcher
 		target.tarball_extract_folder = "monodevelop-2.8"
 		target.version = '2.8'
 		target.dependencies = nil
-		target.mono_dependencies = {"gtk-sharp" => "2.8.0", 
-									"monodoc" => "1.0",
-									"gecko-sharp2" => "0.10",
-									"gtksourceview-sharp2" => "0.10"}
+		target.mono_dependencies = {"gtk-sharp" => ["2.8.0"], 
+									"monodoc" => ["1.0"],
+									"gecko-sharp" => ["0.10", 'please install gecko-sharp2 first'],
+									"gtksourceview2-sharp" => ["2.0.0.0", 'please install gnome-desktop-sharp2 first']}
 		target.use_configure = true
 
 		target

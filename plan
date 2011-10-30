@@ -1,2 +1,1 @@
-add extra prefix info for monodevelop
 move each target to it's own file in a targets/ folder
