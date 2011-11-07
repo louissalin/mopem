@@ -77,10 +77,10 @@ class App
 	end
 
 	def update(target_version)
-		validate_target(target_version)
-		target = @target_fetcher.get_target(target_version)
+		validate_target('mono', target_version)
+		target = @target_fetcher.get_target('mono', target_version)
 
-		if is_tarball?
+		if target.is_tarball?
 			@utils.error 'cannot update a tarball install. This works only for HEAD versions' 
 		end
 
@@ -88,8 +88,8 @@ class App
 
 		puts "updating..."
 		@git_fetcher.update(target.source_dir(home_dir), target)
-		configure(target)
-		build(target)
+		@git_fetcher.configure(target)
+		@git_fetcher.build(target)
 
 		puts "done!"
 	end
