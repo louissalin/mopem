@@ -1,94 +1,156 @@
-require 'rubygems'
-require 'yaml'
+target:
+    - module  : mono
+      branch  : master
+      version : master-HEAD
+      source  :
+        git_repository : mono.git
+      install_as_root     : false
+      system_dependencies : 
+        zypper  : automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++
+        apt_get : 
 
-class Target
-	attr_accessor :repository,
-				  :module,
-				  :branch,
-				  :tarball_url,
-				  :tarball_filename,
-				  :tarball_extract_folder,
-				  :version,
-				  :dependencies,
-				  :mono_dependencies,
-				  :use_configure,
-				  :install_as_root
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-	def initialize(src = :from_tarball)
-		@src = src
-		@install_as_root = false
-		@mono_dependencies = {}
-	end
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-	def is_tarball?
-		return @src == :from_tarball
-	end
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-	def is_from_repository?
-		return @src == :from_repository
-	end
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-	def source_dir(home_dir)
-		@source_dir || create_source_dir(home_dir)
-	end
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-	private
-	def create_source_dir(home_dir)
-		src_dir = "#{home_dir}/sources"
-		Dir.mkdir(src_dir) if !File.directory?(src_dir)
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-		target_dir = if @module == 'mono' 
-					     "#{src_dir}/#{@version}"
-					 else
-					     "#{src_dir}/#{@module}_#{@version}"
-					 end
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-		Dir.mkdir(target_dir) if !File.directory?(target_dir)
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-		@source_dir = target_dir
-		target_dir
-	end
-end
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-class TargetFetcher
-	attr_reader :targets
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
-	GIT_BASE = 'http://github.com/mono'
-
-	def initialize
-		@targets = []
-		#TODO: this is a great opportunity for meta programming!
-		@targets.push create_mono_HEAD_target
-		@targets.push create_mono_2_10_HEAD_target
-		@targets.push create_mono_2_10_4_target
-		@targets.push create_mono_2_10_5_target
-		@targets.push create_gtk_sharp_2_12_11_target
-		@targets.push create_libgdiplus_2_10_target
-		@targets.push create_xsp_2_10_2_target
-		@targets.push create_mod_mono_2_10_target
-		@targets.push create_mono_addins_0_6_2_target
-		@targets.push create_monodevelop_2_8_target
-		@targets.push create_gnome_desktop_sharp_2_0_target
-		@targets.push create_gecko_sharp_2_0_target
-	end
-
-	def get_target(mod, version)
-		@targets.each {|t| return t if t.version == version and t.module == mod}
-		nil
-	end
-
-	private
-	def create_mono_HEAD_target
-		target = Target.new(:from_repository)
-		target.module = 'mono'
-		target.repository = "#{GIT_BASE}/mono.git"
-		target.branch = 'master'
-		target.version = 'master-HEAD'
-		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
-		target.use_configure = false
-
-		target
-	end
+    - module  :
+      branch  :
+      version :
+      source  :
+        git_repository         :
+        tarball_url            :
+        tarball_filename       :
+      install_as_root     :
+      system_dependencies :
+        zypper  : 
+        apt_get : 
+      mono_dependencies   :
 
 	def create_mono_2_10_HEAD_target
 		target = Target.new(:from_repository)
@@ -236,4 +298,3 @@ class TargetFetcher
 
 		target
 	end
-end
