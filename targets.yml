@@ -8,293 +8,114 @@ target:
       system_dependencies : 
         zypper  : automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++
         apt_get : 
+      mono_dependencies   :
 
-    - module  :
-      branch  :
-      version :
+    - module  : mono
+      branch  : mono-2-10
+      version : 2.10-HEAD
+      source  : 
+        git_repository : mono.git
+      install_as_root     : false
+      system_dependencies : 
+        zypper  : automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++
+        apt_get : 
+      mono_dependencies   :
+
+    - module  : gtk-sharp
+      version : 2.12.11
+      source  : 
+        tarball_url      : http://download.mono-project.com/sources/gtk-sharp212/
+        tarball_filename : gtk-sharp-2.12.11.tar.bz2
+      install_as_root     : false
+      system_dependencies :
+        zypper  : gtk2-devel
+        apt_get : 
+      mono_dependencies   :
+
+    - module  : libgdiplus
+      version : 2.10
       source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
+        tarball_url      : http://download.mono-project.com/sources/libgdiplus/
+        tarball_filename : libgdiplus-2.10.tar.bz2
+      install_as_root     : false
+      system_dependencies : 
+        zypper  : freetype2-devel fontconfig-devel libpng14-devel
+        apt_get : 
+      mono_dependencies   :
+
+    - module  : xsp
+      version : 2.10.2
+      source  :
+        tarball_url      : http://download.mono-project.com/sources/xsp/
+        tarball_filename : xsp-2.10.2.tar.bz2
+      install_as_root     : false
       system_dependencies :
         zypper  : 
         apt_get : 
       mono_dependencies   :
 
-    - module  :
-      branch  :
-      version :
+    - module  : mod_mono
+      version : 2.10
       source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
+        tarball_url      : http://download.mono-project.com/sources/mod_mono/
+        tarball_filename : mod_mono-2.10.tar.bz2
+      install_as_root     : true
+      system_dependencies : 
+        zypper  : apache2-devel
+        apt_get : 
+      mono_dependencies   :
+
+    - module  : mono_addins
+      version : 0.6.2
+      source  :
+        tarball_url      : http://download.mono-project.com/sources/mono-addins/
+        tarball_filename : mono-addins-0.6.2.tar.bz2
+      install_as_root     : false
       system_dependencies :
         zypper  : 
         apt_get : 
       mono_dependencies   :
 
-    - module  :
-      branch  :
-      version :
+    - module  : gnome_desktop_sharp2
+      version : 2.24.0
       source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
+        tarball_url      : http://download.mono-project.com/sources/gnome-desktop-sharp2/
+        tarball_filename : gnome-desktop-sharp-2.24.0.tar.bz2
+      install_as_root     : false
       system_dependencies :
         zypper  : 
         apt_get : 
       mono_dependencies   :
 
-    - module  :
-      branch  :
-      version :
+    - module  : gecko_sharp2
+      version : 0.13
       source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
+        tarball_url      : http://download.mono-project.com/sources/gecko-sharp2/
+        tarball_filename : gecko-sharp-2.0-0.13.tar.bz2
+      install_as_root     : false
       system_dependencies :
         zypper  : 
         apt_get : 
       mono_dependencies   :
 
-    - module  :
-      branch  :
-      version :
+    - module  : monodevelop
+      version : 2.8
       source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
+        tarball_url      : http://download.mono-project.com/sources/monodevelop/
+        tarball_filename : monodevelop-2.8.tar.bz2
+      install_as_root     : false
       system_dependencies :
         zypper  : 
         apt_get : 
-      mono_dependencies   :
+      mono_dependencies :
+        - name : gtk-sharp 
+          version : 2.8.0
+        - name : monodoc 
+          version : 1.0
+        - name : gecko-sharp 
+          version : 0.10
+          error : please install gecko-sharp2 fist
+        - name : gtksourceview2-sharp 
+          version : 2.0.0.0
+          error : please install gnome-desktop-sharp2 first
 
-    - module  :
-      branch  :
-      version :
-      source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
-      system_dependencies :
-        zypper  : 
-        apt_get : 
-      mono_dependencies   :
-
-    - module  :
-      branch  :
-      version :
-      source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
-      system_dependencies :
-        zypper  : 
-        apt_get : 
-      mono_dependencies   :
-
-    - module  :
-      branch  :
-      version :
-      source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
-      system_dependencies :
-        zypper  : 
-        apt_get : 
-      mono_dependencies   :
-
-    - module  :
-      branch  :
-      version :
-      source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
-      system_dependencies :
-        zypper  : 
-        apt_get : 
-      mono_dependencies   :
-
-    - module  :
-      branch  :
-      version :
-      source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
-      system_dependencies :
-        zypper  : 
-        apt_get : 
-      mono_dependencies   :
-
-    - module  :
-      branch  :
-      version :
-      source  :
-        git_repository         :
-        tarball_url            :
-        tarball_filename       :
-      install_as_root     :
-      system_dependencies :
-        zypper  : 
-        apt_get : 
-      mono_dependencies   :
-
-	def create_mono_2_10_HEAD_target
-		target = Target.new(:from_repository)
-		target.module = 'mono'
-		target.repository = "#{GIT_BASE}/mono.git"
-		target.branch = 'mono-2-10'
-		target.version = '2.10-HEAD'
-		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
-		target.use_configure = false
-
-		target
-	end
-
-	def create_mono_2_10_4_target
-		target = Target.new
-		target.module = 'mono'
-		target.tarball_url = "http://download.mono-project.com/sources/mono/"
-		target.tarball_filename = "mono-2.10.4.tar.bz2"
-		target.tarball_extract_folder = "mono-2.10.4"
-		target.version = '2.10.4'
-		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
-		target.use_configure = true
-
-		target
-	end
-
-	def create_mono_2_10_5_target
-		target = Target.new
-		target.module = 'mono'
-		target.tarball_url = "http://download.mono-project.com/sources/mono/"
-		target.tarball_filename = "mono-2.10.5.tar.bz2"
-		target.tarball_extract_folder = "mono-2.10.5"
-		target.version = '2.10.5'
-		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
-		target.use_configure = true
-
-		target
-	end
-
-	def create_gtk_sharp_2_12_11_target
-		target = Target.new
-		target.module = 'gtk-sharp'
-		target.tarball_url = "http://download.mono-project.com/sources/gtk-sharp212/"
-		target.tarball_filename = "gtk-sharp-2.12.11.tar.bz2"
-		target.tarball_extract_folder = "gtk-sharp-2.12.11"
-		target.version = '2.12.11'
-		target.dependencies = 'gtk2-devel'
-		target.use_configure = true
-
-		target
-	end
-
-	def create_libgdiplus_2_10_target
-		target = Target.new
-		target.module = 'libgdiplus'
-		target.tarball_url = "http://download.mono-project.com/sources/libgdiplus/"
-		target.tarball_filename = "libgdiplus-2.10.tar.bz2"
-		target.tarball_extract_folder = "libgdiplus-2.10"
-		target.version = '2.10'
-		target.dependencies = 'freetype2-devel fontconfig-devel libpng14-devel'
-		target.use_configure = true
-		 
-		target
-	end
-
-	def create_xsp_2_10_2_target
-		target = Target.new
-		target.module = 'xsp'
-		target.tarball_url = "http://download.mono-project.com/sources/xsp/"
-		target.tarball_filename = "xsp-2.10.2.tar.bz2"
-		target.tarball_extract_folder = "xsp-2.10.2"
-		target.version = '2.10.2'
-		target.dependencies = nil
-		target.use_configure = true
-		 
-		target
-	end
-
-	def create_mod_mono_2_10_target
-		target = Target.new
-		target.module = 'mod_mono'
-		target.tarball_url = "http://download.mono-project.com/sources/mod_mono/"
-		target.tarball_filename = "mod_mono-2.10.tar.bz2"
-		target.tarball_extract_folder = "mod_mono-2.10"
-		target.version = '2.10'
-		target.dependencies = 'apache2-devel'
-		target.use_configure = true
-		target.install_as_root = true
-		 
-		target
-	end
-
-	def create_mono_addins_0_6_2_target
-		target = Target.new
-		target.module = 'mono-addins'
-		target.tarball_url = "http://download.mono-project.com/sources/mono-addins/"
-		target.tarball_filename = "mono-addins-0.6.2.tar.bz2"
-		target.tarball_extract_folder = "mono-addins-0.6.2"
-		target.version = '0.6.2'
-		target.dependencies = nil
-		target.use_configure = true
-		 
-		target
-	end
-
-	def create_gnome_desktop_sharp_2_0_target
-		target = Target.new
-		target.module = 'gnome-desktop-sharp2'
-		target.tarball_url = "http://download.mono-project.com/sources/gnome-desktop-sharp2/"
-		target.tarball_filename = "gnome-desktop-sharp-2.24.0.tar.bz2"
-		target.tarball_extract_folder = "gnome-desktop-sharp-2.24.0"
-		target.version = '2.24.0'
-		target.dependencies = nil
-		target.use_configure = true
-
-		target
-	end
-
-	def create_gecko_sharp_2_0_target
-		target = Target.new
-		target.module = 'gecko-sharp2'
-		target.tarball_url = "http://download.mono-project.com/sources/gecko-sharp2/"
-		target.tarball_filename = "gecko-sharp-2.0-0.13.tar.bz2"
-		target.tarball_extract_folder = "gecko-sharp-2.0-0.13"
-		target.version = '0.13'
-		target.dependencies = nil
-		target.use_configure = true
-
-		target
-	end
-
-	def create_monodevelop_2_8_target
-		target = Target.new
-		target.module = 'monodevelop'
-		target.tarball_url = "http://download.mono-project.com/sources/monodevelop/"
-		target.tarball_filename = "monodevelop-2.8.tar.bz2"
-		target.tarball_extract_folder = "monodevelop-2.8"
-		target.version = '2.8'
-		target.dependencies = nil
-		target.mono_dependencies = {"gtk-sharp" => ["2.8.0"], 
-									"monodoc" => ["1.0"],
-									"gecko-sharp" => ["0.10", 'please install gecko-sharp2 first'],
-									"gtksourceview2-sharp" => ["2.0.0.0", 'please install gnome-desktop-sharp2 first']}
-		target.use_configure = true
-
-		target
-	end
