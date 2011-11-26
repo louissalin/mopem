@@ -57,19 +57,12 @@ class TargetFetcher
 
 	def initialize
 		@targets = []
-		#TODO: this is a great opportunity for meta programming!
-		@targets.push create_mono_HEAD_target
-		@targets.push create_mono_2_10_HEAD_target
-		@targets.push create_mono_2_10_4_target
-		@targets.push create_mono_2_10_5_target
-		@targets.push create_gtk_sharp_2_12_11_target
-		@targets.push create_libgdiplus_2_10_target
-		@targets.push create_xsp_2_10_2_target
-		@targets.push create_mod_mono_2_10_target
-		@targets.push create_mono_addins_0_6_2_target
-		@targets.push create_monodevelop_2_8_target
-		@targets.push create_gnome_desktop_sharp_2_0_target
-		@targets.push create_gecko_sharp_2_0_target
+
+		yml = YAML.parse_file('targets.yml')
+		yml_targets = yml.select('/target/*')
+		yml_targets.each do |t|
+			@targets.push create_target(t.transform)
+		end
 	end
 
 	def get_target(mod, version)
@@ -78,162 +71,38 @@ class TargetFetcher
 	end
 
 	private
-	def create_mono_HEAD_target
-		target = Target.new(:from_repository)
-		target.module = 'mono'
-		target.repository = "#{GIT_BASE}/mono.git"
-		target.branch = 'master'
-		target.version = 'master-HEAD'
-		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
-		target.use_configure = false
+	def create_target(yml_target)
+		source = yml_target['source']
+		from_git_repo = source['git_repository'] != nil
+
+		target = Target.new(from_git_repo)
+		target.module = yml_target['module']
+		target.version = yml_target['version']
+		target.install_as_root = yml_target['install_as_root']
+		
+		sys_dep = yml_target['system_dependencies']
+		target.dependencies = sys_dep['zypper'] || sys_dep['apt_get']
+		
+		if from_git_repo then
+			target.repository = "#{GIT_BASE}/#{source['git_repository']}"
+			target.branch = yml_target['branch']
+			target.use_configure = false
+		else
+			target.tarball_url = source['tarball_url']
+			target.tarball_filename = source['tarball_filename']
+			target.tarball_extract_folder = get_extract_folder_from_filename(target.tarball_filename)
+			target.use_configure = true
+		end
 
 		target
 	end
 
-	def create_mono_2_10_HEAD_target
-		target = Target.new(:from_repository)
-		target.module = 'mono'
-		target.repository = "#{GIT_BASE}/mono.git"
-		target.branch = 'mono-2-10'
-		target.version = '2.10-HEAD'
-		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
-		target.use_configure = false
+	def get_extract_folder_from_filename(filename)
+		if filename =~ /.tar.bz2$/
+			return filename[0..filename.length - 9]
+		end
 
-		target
+		''
 	end
 
-	def create_mono_2_10_4_target
-		target = Target.new
-		target.module = 'mono'
-		target.tarball_url = "http://download.mono-project.com/sources/mono/"
-		target.tarball_filename = "mono-2.10.4.tar.bz2"
-		target.tarball_extract_folder = "mono-2.10.4"
-		target.version = '2.10.4'
-		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
-		target.use_configure = true
-
-		target
-	end
-
-	def create_mono_2_10_5_target
-		target = Target.new
-		target.module = 'mono'
-		target.tarball_url = "http://download.mono-project.com/sources/mono/"
-		target.tarball_filename = "mono-2.10.5.tar.bz2"
-		target.tarball_extract_folder = "mono-2.10.5"
-		target.version = '2.10.5'
-		target.dependencies = 'automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++'
-		target.use_configure = true
-
-		target
-	end
-
-	def create_gtk_sharp_2_12_11_target
-		target = Target.new
-		target.module = 'gtk-sharp'
-		target.tarball_url = "http://download.mono-project.com/sources/gtk-sharp212/"
-		target.tarball_filename = "gtk-sharp-2.12.11.tar.bz2"
-		target.tarball_extract_folder = "gtk-sharp-2.12.11"
-		target.version = '2.12.11'
-		target.dependencies = 'gtk2-devel'
-		target.use_configure = true
-
-		target
-	end
-
-	def create_libgdiplus_2_10_target
-		target = Target.new
-		target.module = 'libgdiplus'
-		target.tarball_url = "http://download.mono-project.com/sources/libgdiplus/"
-		target.tarball_filename = "libgdiplus-2.10.tar.bz2"
-		target.tarball_extract_folder = "libgdiplus-2.10"
-		target.version = '2.10'
-		target.dependencies = 'freetype2-devel fontconfig-devel libpng14-devel'
-		target.use_configure = true
-		 
-		target
-	end
-
-	def create_xsp_2_10_2_target
-		target = Target.new
-		target.module = 'xsp'
-		target.tarball_url = "http://download.mono-project.com/sources/xsp/"
-		target.tarball_filename = "xsp-2.10.2.tar.bz2"
-		target.tarball_extract_folder = "xsp-2.10.2"
-		target.version = '2.10.2'
-		target.dependencies = nil
-		target.use_configure = true
-		 
-		target
-	end
-
-	def create_mod_mono_2_10_target
-		target = Target.new
-		target.module = 'mod_mono'
-		target.tarball_url = "http://download.mono-project.com/sources/mod_mono/"
-		target.tarball_filename = "mod_mono-2.10.tar.bz2"
-		target.tarball_extract_folder = "mod_mono-2.10"
-		target.version = '2.10'
-		target.dependencies = 'apache2-devel'
-		target.use_configure = true
-		target.install_as_root = true
-		 
-		target
-	end
-
-	def create_mono_addins_0_6_2_target
-		target = Target.new
-		target.module = 'mono-addins'
-		target.tarball_url = "http://download.mono-project.com/sources/mono-addins/"
-		target.tarball_filename = "mono-addins-0.6.2.tar.bz2"
-		target.tarball_extract_folder = "mono-addins-0.6.2"
-		target.version = '0.6.2'
-		target.dependencies = nil
-		target.use_configure = true
-		 
-		target
-	end
-
-	def create_gnome_desktop_sharp_2_0_target
-		target = Target.new
-		target.module = 'gnome-desktop-sharp2'
-		target.tarball_url = "http://download.mono-project.com/sources/gnome-desktop-sharp2/"
-		target.tarball_filename = "gnome-desktop-sharp-2.24.0.tar.bz2"
-		target.tarball_extract_folder = "gnome-desktop-sharp-2.24.0"
-		target.version = '2.24.0'
-		target.dependencies = nil
-		target.use_configure = true
-
-		target
-	end
-
-	def create_gecko_sharp_2_0_target
-		target = Target.new
-		target.module = 'gecko-sharp2'
-		target.tarball_url = "http://download.mono-project.com/sources/gecko-sharp2/"
-		target.tarball_filename = "gecko-sharp-2.0-0.13.tar.bz2"
-		target.tarball_extract_folder = "gecko-sharp-2.0-0.13"
-		target.version = '0.13'
-		target.dependencies = nil
-		target.use_configure = true
-
-		target
-	end
-
-	def create_monodevelop_2_8_target
-		target = Target.new
-		target.module = 'monodevelop'
-		target.tarball_url = "http://download.mono-project.com/sources/monodevelop/"
-		target.tarball_filename = "monodevelop-2.8.tar.bz2"
-		target.tarball_extract_folder = "monodevelop-2.8"
-		target.version = '2.8'
-		target.dependencies = nil
-		target.mono_dependencies = {"gtk-sharp" => ["2.8.0"], 
-									"monodoc" => ["1.0"],
-									"gecko-sharp" => ["0.10", 'please install gecko-sharp2 first'],
-									"gtksourceview2-sharp" => ["2.0.0.0", 'please install gnome-desktop-sharp2 first']}
-		target.use_configure = true
-
-		target
-	end
 end
