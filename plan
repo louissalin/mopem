@@ -1,1 +1,8 @@
-move each target to it's own file in a targets/ folder
+create target for MonoGames
+  - add config for xbuild
+  - autoinstall in GAC
+
+create target for OpenTK
+  - add support for zip
+  - add support for downloading from sourceforge
+  - autoinstall in GAC
