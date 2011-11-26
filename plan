@@ -1,3 +1,10 @@
+add apt-get dependencies
+
+create target for OpenTK
+  - add support for zip
+  - add support for downloading from sourceforge
+  - autoinstall in GAC (worked straight after running xbuild)
+
 create target for MonoGames
   - add config for xbuild
     - add target .sln file
@@ -9,9 +16,5 @@ create target for MonoGames
 	  - add lib folder to $MONO_PATH when using that mono version
 	  - overwrite when installing
 
-create target for OpenTK
-  - add support for zip
-  - add support for downloading from sourceforge
-  - autoinstall in GAC (worked straight after running xbuild)
 
 
