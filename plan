@@ -1,8 +1,17 @@
 create target for MonoGames
   - add config for xbuild
+    - add target .sln file
   - autoinstall in GAC
+    - make sure we can uninstall from GAC first
+    - add option to not install in GAC
+	  - create lib folder in .mopem/install/[mono version]/
+	  - install there
+	  - add lib folder to $MONO_PATH when using that mono version
+	  - overwrite when installing
 
 create target for OpenTK
   - add support for zip
   - add support for downloading from sourceforge
-  - autoinstall in GAC
+  - autoinstall in GAC (worked straight after running xbuild)
+
+
