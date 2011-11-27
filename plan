@@ -1,20 +1,18 @@
 add apt-get dependencies
+use options gem for command line options
+add option for specifying 
+  - source folder (skip download & compile from source folder)
+  - skip compilation step (for testing purposes)
+add support for zip files
+add support for xbuild and .sln files
+add option for installing in GAC (default)
+add option for installing in lib folder inside .mopem
+  - create lib folder in .mopem/install/[mono version]/
+  - add lib folder to $MONO_PATH when using that mono version
+  - overwrite when installing
+split targets.yml in multiple .yml files.
+  - one per target
+  - multiple versions of same target in same file
 
 create target for OpenTK
-  - add support for zip
-  - add support for downloading from sourceforge
-  - autoinstall in GAC (worked straight after running xbuild)
-
 create target for MonoGames
-  - add config for xbuild
-    - add target .sln file
-  - autoinstall in GAC
-    - make sure we can uninstall from GAC first
-    - add option to not install in GAC
-	  - create lib folder in .mopem/install/[mono version]/
-	  - install there
-	  - add lib folder to $MONO_PATH when using that mono version
-	  - overwrite when installing
-
-
-
