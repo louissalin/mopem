@@ -39,6 +39,14 @@ class Utils
 		end
 	end
 
+	def is_apt_get_available
+		`which apt-get`.length > 0
+	end
+
+	def is_zypper_available
+		`which zypper`.length > 0
+	end
+
 	private
 	def get_current_environment_script
 		mono_target = get_mono_target

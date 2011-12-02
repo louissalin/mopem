@@ -115,8 +115,15 @@ class App
 	def install_dependencies(target)
 		return if target.dependencies == nil
 		puts "installing dependencies. This might require you to enter your sudo password"
-		if !system "sudo zypper install -y #{target.dependencies}"
-			@utils.error 'failed to install dependencies'
+
+		if @utils.is_zypper_available then
+			if !system "sudo zypper install -y #{target.dependencies}"
+				@utils.error 'failed to install dependencies'
+			end
+		elsif @utils.is_apt_get_available then
+			if !system "sudo apt-get install #{target.dependencies} -y"
+				@utils.error 'failed to install dependencies'
+			end
 		end
 	end
 

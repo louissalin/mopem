@@ -14,18 +14,17 @@ class Target
 				  :use_configure,
 				  :install_as_root
 
-	def initialize(src = :from_tarball)
-		@src = src
+	def initialize
 		@install_as_root = false
 		@mono_dependencies = {}
 	end
 
 	def is_tarball?
-		return @src == :from_tarball
+		return @tarball_url != nil
 	end
 
 	def is_from_repository?
-		return @src == :from_repository
+		return @repository != nil
 	end
 
 	def source_dir(home_dir)
@@ -53,9 +52,10 @@ end
 class TargetFetcher
 	attr_reader :targets
 
-	GIT_BASE = 'http://github.com/mono'
+	GIT_BASE = 'git://github.com/mono'
 
 	def initialize
+		@utils = Utils.new
 		@targets = []
 
 		yml = YAML.parse_file('targets.yml')
@@ -73,16 +73,21 @@ class TargetFetcher
 	private
 	def create_target(yml_target)
 		source = yml_target['source']
-		from_git_repo = source['git_repository'] != nil
 
-		target = Target.new(from_git_repo)
+		target = Target.new
 		target.module = yml_target['module']
 		target.version = yml_target['version']
 		target.install_as_root = yml_target['install_as_root']
 		
 		sys_dep = yml_target['system_dependencies']
-		target.dependencies = sys_dep['zypper'] || sys_dep['apt_get']
+
+		if @utils.is_zypper_available then
+			target.dependencies = sys_dep['zypper']
+		elsif @utils.is_apt_get_available then
+			target.dependencies = sys_dep['apt_get']
+		end
 		
+		from_git_repo = source['git_repository'] != nil
 		if from_git_repo then
 			target.repository = "#{GIT_BASE}/#{source['git_repository']}"
 			target.branch = yml_target['branch']

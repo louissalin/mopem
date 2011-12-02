@@ -7,7 +7,7 @@ target:
       install_as_root     : false
       system_dependencies : 
         zypper  : automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++
-        apt_get : 
+        apt_get : build-essential automake libtool gawk intltool autoconf bison flex git-core mono-gmcs mono-mcs
       mono_dependencies   :
 
     - module  : mono
