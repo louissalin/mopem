@@ -29,7 +29,7 @@ target:
       install_as_root     : false
       system_dependencies :
         zypper  : gtk2-devel
-        apt_get : 
+        apt_get : libgtk2.0-dev 
       mono_dependencies   :
 
     - module  : libgdiplus
