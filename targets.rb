@@ -12,7 +12,8 @@ class Target
 				  :dependencies,
 				  :mono_dependencies,
 				  :use_configure,
-				  :install_as_root
+				  :install_as_root,
+				  :source_dir
 
 	def initialize
 		@install_as_root = false

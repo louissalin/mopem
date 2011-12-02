@@ -7,6 +7,7 @@ class TarballFetcher
 	end
 
 	def fetch(target_dir, target)
+		puts "fetching tarball sources..."
 		if File.directory?("#{target_dir}/#{target.module}")
 			@utils.error("target version #{target.version} is already installed")
 		end

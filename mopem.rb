@@ -16,7 +16,13 @@ if (ARGV[0] == 'install')
 	mod = ARGV[1]
 	target_version = ARGV[2]
 
-	app.install(mod, target_version)
+	source_folder = nil 
+	if ARGV[3] != nil && ARGV[3][0..5] == '--src='
+		source_folder = ARGV[3][6..ARGV[3].length]
+		puts "using source folder #{source_folder}"
+	end
+
+	app.install(mod, target_version, source_folder)
 	exit 0
 end
 

@@ -55,20 +55,24 @@ class App
 		exec '/usr/bin/env bash'
 	end
 
-	def install(mod, target_version)
+	def install(mod, target_version, src_dir = nil)
 		validate_target(mod, target_version)
 		target = @target_fetcher.get_target(mod, target_version)
 
 		verify_mono_dependencies(target)
 		install_dependencies(target)
 
-		puts "fetching sources..."
+		skip_fetch = src_dir != nil
+		if skip_fetch && File.directory?(src_dir)
+			target.source_dir = src_dir
+		end
+
 		if target.is_from_repository?
-			@git_fetcher.fetch(target.source_dir(home_dir), target)
+			@git_fetcher.fetch(target.source_dir(home_dir), target) if !skip_fetch
 			@git_fetcher.configure(target)
 			@git_fetcher.build(target)
 		else
-			@tarball_fetcher.fetch(target.source_dir(home_dir), target)
+			@tarball_fetcher.fetch(target.source_dir(home_dir), target) if !skip_fetch
 			@tarball_fetcher.configure(target)
 			@tarball_fetcher.build(target)
 		end
