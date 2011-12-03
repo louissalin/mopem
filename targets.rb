@@ -17,7 +17,7 @@ class Target
 
 	def initialize
 		@install_as_root = false
-		@mono_dependencies = {}
+		@mono_dependencies = []
 	end
 
 	def is_tarball?
@@ -50,6 +50,18 @@ class Target
 	end
 end
 
+class MonoDependency
+    attr_reader :name,
+                :version,
+                :error
+
+    def initialize(name, version, error)
+        @name = name
+        @version = version
+        @error = error
+    end
+end
+
 class TargetFetcher
 	attr_reader :targets
 
@@ -77,7 +89,7 @@ class TargetFetcher
 
 		target = Target.new
 		target.module = yml_target['module']
-		target.version = yml_target['version']
+		target.version = yml_target['version'].to_s
 		target.install_as_root = yml_target['install_as_root']
 		
 		sys_dep = yml_target['system_dependencies']
@@ -99,6 +111,15 @@ class TargetFetcher
 			target.tarball_extract_folder = get_extract_folder_from_filename(target.tarball_filename)
 			target.use_configure = true
 		end
+
+        dependencies = yml_target['mono_dependencies']
+        if dependencies != nil
+            dependencies.each do |dep|
+                target.mono_dependencies << MonoDependency.new(dep['name'], 
+                                                               dep['version'].to_s, 
+                                                               dep['error'])
+            end
+        end
 
 		target
 	end

@@ -100,17 +100,18 @@ class App
 
 	private
 	def verify_mono_dependencies(target)
+        puts "verifying mono dependencies..."
 		target.mono_dependencies.each do |dep|
-			version = `gacutil -l #{dep[0]} | awk 'match($2, /Version=(.*),/, a) {print a[1]}'`
+			version = `gacutil -l #{dep.name} | awk 'match($2, /Version=(.*),/, a) {print a[1]}'`
 			version = '0.0' if version.length == 0
 
 			found_version = Versionomy.parse(version.gsub(/\n/, ''))
-			needed_version = Versionomy.parse(dep[1][0])
+			needed_version = Versionomy.parse(dep.version)
 			if found_version < needed_version
-				if dep[1].length == 1 then 
-					@utils.error "please install target #{dep[0]} version #{dep[1]} first"
+				if dep.error == nil || dep.error.length == 0 then 
+					@utils.error "please install target #{dep.name} version #{dep.version} first"
 				else
-					@utils.error dep[1][1]
+					@utils.error dep.error
 				end
 			end
 		end

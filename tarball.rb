@@ -12,6 +12,7 @@ class TarballFetcher
 			@utils.error("target version #{target.version} is already installed")
 		end
 
+        puts "#{target_dir}/#{target.tarball_filename}"
 		if !File.exists?("#{target_dir}/#{target.tarball_filename}")
 			@utils.command "#{target_dir}",
 					"wget #{target.tarball_url}/#{target.tarball_filename}",

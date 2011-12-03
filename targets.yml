@@ -114,7 +114,7 @@ target:
           version : 1.0
         - name : gecko-sharp 
           version : 0.10
-          error : please install gecko-sharp2 fist
+          error : please install gecko-sharp2 first
         - name : gtksourceview2-sharp 
           version : 2.0.0.0
           error : please install gnome-desktop-sharp2 first
