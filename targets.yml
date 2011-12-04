@@ -24,18 +24,18 @@ target:
     - module  : gtk-sharp
       version : 2.12.11
       source  : 
-        tarball_url      : http://download.mono-project.com/sources/gtk-sharp212/
+        tarball_url      : http://download.mono-project.com/sources/gtk-sharp212
         tarball_filename : gtk-sharp-2.12.11.tar.bz2
       install_as_root     : false
       system_dependencies :
-        zypper  : gtk2-devel
-        apt_get : libgtk2.0-dev 
+        zypper  : gtk2-devel libglade2-devel
+        apt_get : libgtk2.0-dev libglade2-dev
       mono_dependencies   :
 
     - module  : libgdiplus
       version : 2.10
       source  :
-        tarball_url      : http://download.mono-project.com/sources/libgdiplus/
+        tarball_url      : http://download.mono-project.com/sources/libgdiplus
         tarball_filename : libgdiplus-2.10.tar.bz2
       install_as_root     : false
       system_dependencies : 
@@ -46,7 +46,7 @@ target:
     - module  : xsp
       version : 2.10.2
       source  :
-        tarball_url      : http://download.mono-project.com/sources/xsp/
+        tarball_url      : http://download.mono-project.com/sources/xsp
         tarball_filename : xsp-2.10.2.tar.bz2
       install_as_root     : false
       system_dependencies :
@@ -57,7 +57,7 @@ target:
     - module  : mod_mono
       version : 2.10
       source  :
-        tarball_url      : http://download.mono-project.com/sources/mod_mono/
+        tarball_url      : http://download.mono-project.com/sources/mod_mono
         tarball_filename : mod_mono-2.10.tar.bz2
       install_as_root     : true
       system_dependencies : 
@@ -68,30 +68,8 @@ target:
     - module  : mono_addins
       version : 0.6.2
       source  :
-        tarball_url      : http://download.mono-project.com/sources/mono-addins/
+        tarball_url      : http://download.mono-project.com/sources/mono-addins
         tarball_filename : mono-addins-0.6.2.tar.bz2
-      install_as_root     : false
-      system_dependencies :
-        zypper  : 
-        apt_get : 
-      mono_dependencies   :
-
-    - module  : gnome_desktop_sharp2
-      version : 2.24.0
-      source  :
-        tarball_url      : http://download.mono-project.com/sources/gnome-desktop-sharp2/
-        tarball_filename : gnome-desktop-sharp-2.24.0.tar.bz2
-      install_as_root     : false
-      system_dependencies :
-        zypper  : 
-        apt_get : 
-      mono_dependencies   :
-
-    - module  : gecko_sharp2
-      version : 0.13
-      source  :
-        tarball_url      : http://download.mono-project.com/sources/gecko-sharp2/
-        tarball_filename : gecko-sharp-2.0-0.13.tar.bz2
       install_as_root     : false
       system_dependencies :
         zypper  : 
@@ -101,7 +79,7 @@ target:
     - module  : monodevelop
       version : 2.8
       source  :
-        tarball_url      : http://download.mono-project.com/sources/monodevelop/
+        tarball_url      : http://download.mono-project.com/sources/monodevelop
         tarball_filename : monodevelop-2.8.tar.bz2
       install_as_root     : false
       system_dependencies :
@@ -112,10 +90,7 @@ target:
           version : 2.8.0
         - name : monodoc 
           version : 1.0
-        - name : gecko-sharp 
-          version : 0.10
-          error : please install gecko-sharp2 first
-        - name : gtksourceview2-sharp 
-          version : 2.0.0.0
-          error : please install gnome-desktop-sharp2 first
+        - name : Mono.Addins
+          version : 0.6
+          error: please install mono_addins first
 
