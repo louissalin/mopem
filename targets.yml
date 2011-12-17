@@ -77,10 +77,10 @@ target:
       mono_dependencies   :
 
     - module  : monodevelop
-      version : 2.8
+      version : 2.8.5
       source  :
         tarball_url      : http://download.mono-project.com/sources/monodevelop
-        tarball_filename : monodevelop-2.8.tar.bz2
+        tarball_filename : monodevelop-2.8.5.tar.bz2
       install_as_root     : false
       system_dependencies :
         zypper  : 
