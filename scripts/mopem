@@ -7,9 +7,18 @@ export MOPEM_SOURCE_PATH="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
 
 function mopem() 
 {
-    echo `ruby $MOPEM_SOURCE_PATH/mopem.rb ${1} ${2}`
+    if [ "${1}" = "use" ]; then
+        if ruby $MOPEM_SOURCE_PATH/mopem.rb exists ${2}; then
+            export DYLD_LIBRARY_FALLBACK_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb DYLD ${2}`:$DYLD_LIBRARY_FALLBACK_PATH"
+            export LD_LIBRARY_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb LD ${2}`:$LD_LIBRARY_PATH"
+            export C_INCLUDE_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb C_INCLUDE ${2}`"
+            export ACLOCAL_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb ACLOCAL ${2}`"
+            export PKG_CONFIG_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb PKG_CONFIG ${2}`"
+            export PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb PATH ${2}`":$PATH
+            export MOPEM_CURRENT_MONO_VERSION="${2}"
+        fi
+    else
+        ruby $MOPEM_SOURCE_PATH/mopem.rb ${1} ${2} ${3}
+    fi
 }
 
-DIR="$( cd "$( dirname "$0" )" && pwd )"
-export PATH=$DIR:$MOPEM_PATH:$PATH
-PS1="$MOPEM_PS1$PS1"

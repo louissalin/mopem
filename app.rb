@@ -29,7 +29,40 @@ class App
 		end
 	end
 
-	def switch(target_version)
+    def get_DYLP_path(target_version)
+        mono_prefix = get_mono_prefix(target_version)
+        "#{mono_prefix}/lib"
+    end
+
+    def get_LD_LIBRARY_path(target_version)
+        get_DYLP_path(target_version)
+    end
+
+    def get_C_INCLUDE_path(target_version)
+        mono_prefix = get_mono_prefix(target_version)
+		gnome_prefix ='/usr'
+
+        "#{mono_prefix}/include:#{gnome_prefix}/include"
+    end
+
+    def get_ACLOCAL_path(target_version)
+        mono_prefix = get_mono_prefix(target_version)
+        "#{mono_prefix}/share/aclocal"
+    end
+
+    def get_PKG_CONFIG_path(target_version)
+        mono_prefix = get_mono_prefix(target_version)
+		gnome_prefix ='/usr'
+
+        "#{mono_prefix}/lib/pkgconfig:#{gnome_prefix}/lib/pkgconfig"
+    end
+
+    def get_path(target_version)
+        mono_prefix = get_mono_prefix(target_version)
+        "#{mono_prefix}/bin"
+    end
+
+    def get_mono_prefix(target_version)
 		validate_target('mono', target_version)
 		target = @target_fetcher.get_target('mono', target_version)
 
@@ -40,20 +73,8 @@ class App
 			@utils.error "target version #{target_version} is not installed."
 		end
 
-		mono_prefix = @utils.get_mono_prefix(target)
-		gnome_prefix ='/usr'
-
-		ENV['DYLD_LIBRARY_FALLBACK_PATH'] = "#{mono_prefix}/lib:#{ENV['DYLD_LIBRARY_FALLBACK_PATH']}"
-		ENV['LD_LIBRARY_PATH'] = "#{mono_prefix}/lib:#{ENV['LD_LIBRARY_PATH']}"
-		ENV['C_INCLUDE_PATH'] = "#{mono_prefix}/include:#{gnome_prefix}/include"
-		ENV['ACLOCAL_PATH'] = "#{mono_prefix}/share/aclocal"
-		ENV['PKG_CONFIG_PATH'] = "#{mono_prefix}/lib/pkgconfig:#{gnome_prefix}/lib/pkgconfig"
-		ENV['MOPEM_PATH'] = "#{mono_prefix}/bin"
-		ENV['MOPEM_PS1'] = "[mono-#{target.version}] "
-		ENV['MOPEM_CURRENT_MONO_VERSION'] = "#{target.version}"
-
-		exec '/usr/bin/env bash'
-	end
+		@utils.get_mono_prefix(target)
+    end
 
 	def install(mod, target_version, src_dir = nil)
 		validate_target(mod, target_version)
@@ -97,6 +118,10 @@ class App
 
 		puts "done!"
 	end
+
+    def exists(target_version)
+		validate_target('mono', target_version)
+    end
 
 	private
 	def verify_mono_dependencies(target)
