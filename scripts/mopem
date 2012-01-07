@@ -1,6 +1,15 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+#find mopem.rb path...
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+export MOPEM_SOURCE_PATH="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
+
+function mopem() 
+{
+    echo `ruby $MOPEM_SOURCE_PATH/mopem.rb ${1} ${2}`
+}
 
 DIR="$( cd "$( dirname "$0" )" && pwd )"
-
 export PATH=$DIR:$MOPEM_PATH:$PATH
 PS1="$MOPEM_PS1$PS1"
