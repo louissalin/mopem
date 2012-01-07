@@ -67,7 +67,7 @@ class TargetFetcher
 	end
 
 	def get_target(mod, version)
-		@targets.each {|t| return t if t.version == version and t.module == mod}
+		@targets.each {|t| return t if t.version.to_s == version and t.module == mod}
 		nil
 	end
 

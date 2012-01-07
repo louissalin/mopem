@@ -162,7 +162,7 @@ class App
 
 	def validate_target(mod, target_version)
 		@target_fetcher.targets.each do |t|
-			return if t.version == target_version and t.module == mod
+			return if t.version.to_s == target_version and t.module == mod
 		end
 
 		@utils.error "couldn't find #{mod} version #{target_version}"
