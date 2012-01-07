@@ -34,12 +34,53 @@ if (ARGV[0] == 'update')
 	exit 0
 end
 
-if (ARGV[0] == 'use')
-	utils.error('please specify a target') if (ARGV.length < 2)
-	target_version = ARGV[1]
+if (ARGV[0] == 'DYLD')
+	utils.error('please specify a mono version') if (ARGV.length < 2)
+    target_version = ARGV[1]
+    puts app.get_DYLP_path(target_version)
+    exit 0
+end
 
-	app.switch(target_version)
-	exit 0
+if (ARGV[0] == 'LD')
+	utils.error('please specify a mono version') if (ARGV.length < 2)
+    target_version = ARGV[1]
+    puts app.get_LD_LIBRARY_path(target_version)
+    exit 0
+end
+
+if (ARGV[0] == 'C_INCLUDE')
+	utils.error('please specify a mono version') if (ARGV.length < 2)
+    target_version = ARGV[1]
+    puts app.get_C_INCLUDE_path(target_version)
+    exit 0
+end
+
+if (ARGV[0] == 'ACLOCAL')
+	utils.error('please specify a mono version') if (ARGV.length < 2)
+    target_version = ARGV[1]
+    puts app.get_ACLOCAL_path(target_version)
+    exit 0
+end
+
+if (ARGV[0] == 'PKG_CONFIG')
+	utils.error('please specify a mono version') if (ARGV.length < 2)
+    target_version = ARGV[1]
+    puts app.get_PKG_CONFIG_path(target_version)
+    exit 0
+end
+
+if (ARGV[0] == 'PATH')
+	utils.error('please specify a mono version') if (ARGV.length < 2)
+    target_version = ARGV[1]
+    puts app.get_path(target_version)
+    exit 0
+end
+
+if (ARGV[0] == 'exists')
+	utils.error('please specify a mono version') if (ARGV.length < 2)
+    target_version = ARGV[1]
+    app.exists(target_version)
+    exit 0
 end
 
 utils.error 'unkown command'

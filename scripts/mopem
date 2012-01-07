@@ -1,6 +1,32 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-DIR="$( cd "$( dirname "$0" )" && pwd )"
+#find mopem.rb path...
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ] ; do SOURCE="$(readlink "$SOURCE")"; done
+export MOPEM_SOURCE_PATH="$( cd -P "$( dirname "$SOURCE" )/.." && pwd )"
 
-export PATH=$DIR:$MOPEM_PATH:$PATH
-PS1="$MOPEM_PS1$PS1"
+function set_mopem_vars()
+{
+    if ruby $MOPEM_SOURCE_PATH/mopem.rb exists ${1}; then
+        export DYLD_LIBRARY_FALLBACK_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb DYLD ${1}`:$DYLD_LIBRARY_FALLBACK_PATH"
+        export LD_LIBRARY_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb LD ${1}`:$LD_LIBRARY_PATH"
+        export C_INCLUDE_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb C_INCLUDE ${1}`"
+        export ACLOCAL_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb ACLOCAL ${1}`"
+        export PKG_CONFIG_PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb PKG_CONFIG ${1}`"
+        export PATH="`ruby $MOPEM_SOURCE_PATH/mopem.rb PATH ${1}`":$PATH
+        export MOPEM_CURRENT_MONO_VERSION="${1}"
+    fi
+}
+
+function mopem() 
+{
+    if [ "${1}" = "use" ]; then
+        set_mopem_vars ${2}
+    elif [ "${1}" = "install" ] && [ "${2}" = "mono" ]; then
+        set_mopem_vars ${3}
+        ruby $MOPEM_SOURCE_PATH/mopem.rb ${1} ${2} ${3}
+    else
+        ruby $MOPEM_SOURCE_PATH/mopem.rb ${1} ${2} ${3}
+    fi
+}
+

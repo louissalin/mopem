@@ -31,14 +31,6 @@ class Utils
 		end
 	end
 
-	def get_or_create_envirnment_script(target)
-		if target.module == 'mono'
-			create_environment_script(target)
-		else
-			get_current_environment_script
-		end
-	end
-
 	def is_apt_get_available
 		`which apt-get`.length > 0
 	end
@@ -48,31 +40,6 @@ class Utils
 	end
 
 	private
-	def get_current_environment_script
-		mono_target = get_mono_target
-		script_path = mono_target.source_dir(@home_dir) + '/mono-environment'
-		". #{script_path}"
-	end
-
-	def create_environment_script(target)
-		mono_prefix = get_mono_prefix(target)
-		gnome_prefix ='/usr'
-		script_path = target.source_dir(@home_dir) + '/mono-environment'
-
-		File.open(script_path, 'w') do |f|
-			f.puts "export DYLD_LIBRARY_FALLBACK_PATH=#{mono_prefix}/lib:$DYLD_LIBRARY_FALLBACK_PATH"
-			f.puts "export LD_LIBRARY_PATH=#{mono_prefix}/lib:$LD_LIBRARY_PATH"
-			f.puts "export C_INCLUDE_PATH=#{mono_prefix}/include:#{gnome_prefix}/include"
-			f.puts "export ACLOCAL_PATH=#{mono_prefix}/share/aclocal"
-			f.puts "export PKG_CONFIG_PATH=#{mono_prefix}/lib/pkgconfig:#{gnome_prefix}/lib/pkgconfig"
-			f.puts "export PATH=#{mono_prefix}/bin:$PATH"
-			f.puts "PS1=\"[mono-#{target.version}] $PS1\""
-		end
-
-		# return bash command to execute script
-		". #{script_path}"
-	end
-
 	def get_mono_target
 		current_mono_version = ENV['MOPEM_CURRENT_MONO_VERSION']
 		if current_mono_version == nil 

@@ -31,27 +31,25 @@ class TarballFetcher
 	def configure(target)
 		puts "configuring..."
 		mono_prefix = @utils.get_mono_prefix(target)
-		env_script_cmd = @utils.get_or_create_envirnment_script(target)
 
 		configure_cmd = './configure'
 		@utils.command "#{target.source_dir(@home_dir)}/#{target.tarball_extract_folder}",
-				"#{env_script_cmd} && #{configure_cmd} --prefix=#{mono_prefix}",
+				"#{configure_cmd} --prefix=#{mono_prefix}",
 				"failed to configure #{target.module}"
 	end
 
 	def build(target)
 		puts "making #{target.module}..."
-		env_script_cmd = @utils.get_or_create_envirnment_script(target)
 
 		puts "compiling..."
 		@utils.command "#{target.source_dir(@home_dir)}/#{target.tarball_extract_folder}",
-				"#{env_script_cmd} && make",
+				"make",
 				"failed to compile #{target.module}"
 
 		puts "installing..."
 		sudo_cmd = target.install_as_root ? 'sudo' : ''
 		@utils.command "#{target.source_dir(@home_dir)}/#{target.tarball_extract_folder}",
-				"#{env_script_cmd} && #{sudo_cmd} make install",
+				"#{sudo_cmd} make install",
 				"failed to install #{target.module}"
 	end
 end

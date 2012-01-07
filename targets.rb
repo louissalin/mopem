@@ -71,7 +71,7 @@ class TargetFetcher
 		@utils = Utils.new
 		@targets = []
 
-		yml = YAML.parse_file('targets.yml')
+		yml = YAML.parse_file(File.dirname(__FILE__) + '/targets.yml')
 		yml_targets = yml.select('/target/*')
 		yml_targets.each do |t|
 			@targets.push create_target(t.transform)
@@ -79,7 +79,7 @@ class TargetFetcher
 	end
 
 	def get_target(mod, version)
-		@targets.each {|t| return t if t.version == version and t.module == mod}
+		@targets.each {|t| return t if t.version.to_s == version and t.module == mod}
 		nil
 	end
 
