@@ -8,10 +8,6 @@ class TarballFetcher
 
 	def fetch(target_dir, target)
 		puts "fetching tarball sources..."
-		if File.directory?("#{target_dir}/#{target.module}")
-			@utils.error("target version #{target.version} is already installed")
-		end
-
         puts "#{target_dir}/#{target.tarball_filename}"
 		if !File.exists?("#{target_dir}/#{target.tarball_filename}")
 			@utils.command "#{target_dir}",

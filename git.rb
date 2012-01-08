@@ -8,10 +8,6 @@ class GitFetcher
 
 	def fetch(target_dir, target)
 		puts "fetching git sources..."
-		if File.directory?("#{target_dir}/#{target.module}/.git")
-			@utils.error("target version #{target.version} is already installed")
-		end
-
 		@utils.command "#{target_dir}",
 			    "git clone #{target.repository}",
 				"error cloning git repo for target #{target.version}",
