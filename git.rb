@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/utils.rb'
+require 'fileutils'
 
 class GitFetcher
 	def initialize(home_dir)
@@ -8,6 +9,10 @@ class GitFetcher
 
 	def fetch(target_dir, target)
 		puts "fetching git sources..."
+		if File.directory?("#{target_dir}/#{target.module}/.git")
+            FileUtils.rm_rf("#{target_dir}/#{target.module}")
+		end
+
 		@utils.command "#{target_dir}",
 			    "git clone #{target.repository}",
 				"error cloning git repo for target #{target.version}",
