@@ -69,10 +69,6 @@ class App
 		src_dir = "#{home_dir}/sources"
 		target_dir = "#{src_dir}/#{target.version}"
 
-		if !File.exist?("#{target_dir}/mono-environment")
-			@utils.error "target version #{target_version} is not installed."
-		end
-
 		@utils.get_mono_prefix(target)
     end
 
