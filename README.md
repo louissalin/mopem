@@ -3,49 +3,38 @@ Mopem is a Mono parallel environment manager, allowing the user to switch easily
 It also allows users to compile and install mono compatible projects from source and install them in a sandboxed mono version.
 
 ##PREREQUISITES
--------------
 
-    You will need ruby 1.8.7 or better and the versionomy gem.
+You will need ruby 1.8.7 or better and the versionomy gem.
 
 ##SETUP
------
 
-    after cloning this project on your local machine, add this line to the end of your .bashrc file:
+after cloning this project on your local machine, add this line to the end of your .bashrc file:
 
-        [[ -s "[cloned repo location]/scripts/mopem" ]] && source "[cloned repo location]/scripts/mopem"
+    [[ -s "[cloned repo location]/scripts/mopem" ]] && source "[cloned repo location]/scripts/mopem"
 
-    and change [cloned repo location] with the location where you cloned the repo.
+and change [cloned repo location] with the location where you cloned the repo.
 
 ##USAGE
------
 
-$ mopem list 
+list all the available targets that can be installed
+    $ mopem list 
 
-will list all the available targets that can be installed
+install the latest in the 2.10 branch
+    $ mopem install mono 2.10-HEAD
 
-$ mopem install mono 2.10-HEAD
+install the 2.10.5 version from 2.10.5
+    $ mopem install mono 2.10.5
 
-will install the latest in the 2.10 branch
+install the HEAD version in the master branch
+    $ mopem install mono master-HEAD
 
-$ mopem install mono 2.10.5
+install gtk-sharp version 2.12.11. Note: you must have selected a mono runtime first.
+    $ mopem install gtk-sharp 2.12.11
 
-will install the 2.10.5 version from 2.10.5
+update the branch
+    $ mopem update 2.10-HEAD
 
-$ mopem install mono master-HEAD
-
-will install the HEAD version in the master branch
-
-$ mopem install gtk-sharp 2.12.11
-
-will install gtk-sharp version 2.12.11. Note: you must have selected a mono runtime first.
-
-$ mopem update 2.10-HEAD
-
-will update the branch
-
-$ mopem use 2.10-HEAD
-$ mopem use master-HEAD
-$ mopem use 2.10.5
-
-will switch to the selected environments by launching a new shell withing the existing one. I plan to replace the current shell at some point, but this isn't what it's doing at the moment.
-
+switch to the selected environments by launching a new shell withing the existing one. I plan to replace the current shell at some point, but this isn't what it's doing at the moment.
+    $ mopem use 2.10-HEAD
+    $ mopem use master-HEAD
+    $ mopem use 2.10.5
