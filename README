@@ -1,52 +1,51 @@
-WARNING: this is a very new app that currently works on my current configuration. 
-It might not work at all for you and it currently only works on OpenSuse.
-
 Mopem is a Mono parallel environment manager, allowing the user to switch easily between different mono versions. Mopem can be used to install a new environment by tracking the proper branch in the mono repository, dependencies and downloading the needed source, compiling it and installing it in /home. It can then switch environments by changing environment variables and path.
 
 It also allows users to compile and install mono compatible projects from source and install them in a sandboxed mono version.
 
-PREREQUISITES:
+##PREREQUISITES
+-------------
 
-ruby: you will need ruby 1.8.7 to run this.
-zypper: this is the package manager used on OpenSuse. I will add support for apt-get in the future so this isn't a "OpenSuse only" app.
+    You will need ruby 1.8.7 or better and the versionomy gem.
 
-SETUP:
+##SETUP
+-----
 
-after cloning this project on your local machine, add this line to the end of your .bashrc file:
+    after cloning this project on your local machine, add this line to the end of your .bashrc file:
 
-    [[ -s "[cloned repo location]/scripts/mopem" ]] && source "[cloned repo location]/scripts/mopem"
+        [[ -s "[cloned repo location]/scripts/mopem" ]] && source "[cloned repo location]/scripts/mopem"
 
-and change [cloned repo location] with the location where you cloned the repo.
+    and change [cloned repo location] with the location where you cloned the repo.
 
-USAGE:
+##USAGE
+-----
 
-$ ruby mopem.rb list 
+$ mopem list 
 
-will list all the available environments
+will list all the available targets that can be installed
 
-$ ruby mopem.rb install mono 2.10-HEAD
+$ mopem install mono 2.10-HEAD
 
 will install the latest in the 2.10 branch
 
-$ ruby mopem.rb install mono 2.10.5
+$ mopem install mono 2.10.5
 
 will install the 2.10.5 version from 2.10.5
 
-$ ruby mopem.rb install mono master-HEAD
+$ mopem install mono master-HEAD
 
 will install the HEAD version in the master branch
 
-$ ruby mopem.rb install gtk-sharp 2.12.11
+$ mopem install gtk-sharp 2.12.11
 
 will install gtk-sharp version 2.12.11. Note: you must have selected a mono runtime first.
 
-$ ruby mopem.rb update 2.10-HEAD
+$ mopem update 2.10-HEAD
 
 will update the branch
 
-$ ruby mopem.rb use 2.10-HEAD
-$ ruby mopem.rb use master-HEAD
-$ ruby mopem.rb use 2.10.5
+$ mopem use 2.10-HEAD
+$ mopem use master-HEAD
+$ mopem use 2.10.5
 
 will switch to the selected environments by launching a new shell withing the existing one. I plan to replace the current shell at some point, but this isn't what it's doing at the moment.
 
