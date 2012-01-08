@@ -17,24 +17,31 @@ and change [cloned repo location] with the location where you cloned the repo.
 ##USAGE
 
 list all the available targets that can be installed
+
     $ mopem list 
 
 install the latest in the 2.10 branch
+
     $ mopem install mono 2.10-HEAD
 
 install the 2.10.5 version from 2.10.5
+
     $ mopem install mono 2.10.5
 
 install the HEAD version in the master branch
+
     $ mopem install mono master-HEAD
 
 install gtk-sharp version 2.12.11. Note: you must have selected a mono runtime first.
+
     $ mopem install gtk-sharp 2.12.11
 
 update the branch
+
     $ mopem update 2.10-HEAD
 
 switch to the selected environments by launching a new shell withing the existing one. I plan to replace the current shell at some point, but this isn't what it's doing at the moment.
+
     $ mopem use 2.10-HEAD
     $ mopem use master-HEAD
     $ mopem use 2.10.5
