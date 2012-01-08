@@ -18,7 +18,18 @@ target:
       install_as_root     : false
       system_dependencies : 
         zypper  : automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++
-        apt_get : 
+        apt_get : build-essential automake libtool gawk intltool autoconf bison flex git-core mono-gmcs mono-mcs
+      mono_dependencies   :
+
+    - module  : mono
+      version : 2.10.8
+      source  : 
+        tarball_url      : http://download.mono-project.com/sources/mono
+        tarball_filename : mono-2.10.8.tar.bz2
+      install_as_root     : false
+      system_dependencies : 
+        zypper  : automake libtool gawk intltool autoconf automake bison flex git-core gcc gcc-c++
+        apt_get : build-essential automake libtool gawk intltool autoconf bison flex git-core mono-gmcs mono-mcs
       mono_dependencies   :
 
     - module  : gtk-sharp
