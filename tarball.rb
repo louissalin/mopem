@@ -18,7 +18,7 @@ class TarballFetcher
 
 		if !File.directory?("#{target_dir}/#{target.tarball_extract_folder}")
 			@utils.command "#{target_dir}",
-					"tar xvjf #{target.tarball_filename}",
+					"#{target.tarball_extract_cmd} #{target.tarball_filename}",
 					"error unarchiving tarball for target #{target.version}",
 					true
 		end

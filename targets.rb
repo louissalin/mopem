@@ -8,6 +8,7 @@ class Target
 				  :tarball_url,
 				  :tarball_filename,
 				  :tarball_extract_folder,
+                  :tarball_extract_cmd,
 				  :version,
 				  :dependencies,
 				  :mono_dependencies,
@@ -109,6 +110,7 @@ class TargetFetcher
 			target.tarball_url = source['tarball_url']
 			target.tarball_filename = source['tarball_filename']
 			target.tarball_extract_folder = get_extract_folder_from_filename(target.tarball_filename)
+			target.tarball_extract_cmd = get_extract_command(target.tarball_filename)
 			target.use_configure = true
 		end
 
@@ -129,7 +131,22 @@ class TargetFetcher
 			return filename[0..filename.length - 9]
 		end
 
+		if filename =~ /.tar.gz$/
+			return filename[0..filename.length - 8]
+		end
+
 		''
 	end
 
+    def get_extract_command(filename)
+		if filename =~ /.tar.bz2$/
+			return 'tar xvjf'
+		end
+
+		if filename =~ /.tar.gz$/
+			return 'tar xvzf'
+		end
+
+		''
+    end
 end
