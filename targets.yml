@@ -94,8 +94,8 @@ target:
         tarball_filename : monodevelop-2.8.5.tar.bz2
       install_as_root     : false
       system_dependencies :
-        zypper  : 
-        apt_get : 
+        zypper  : gnome-sharp2
+        apt_get : gnome-sharp2
       mono_dependencies :
         - name : gtk-sharp 
           version : 2.8.0
