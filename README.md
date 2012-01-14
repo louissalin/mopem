@@ -2,12 +2,14 @@ Mopem is a Mono parallel environment manager, allowing the user to switch easily
 
 It also allows users to compile and install mono compatible projects from source and install them in a sandboxed mono environment.
 
+When installing a target (mono, mono_addins, monodevelop, etc.), mopem will download the code to a directory in ~/.mopem/sources and compile the code from there. When installing mono, the binaries will be copied to a directory inside ~/.mopem/install. When installing any other target, the binaries will be installed in somewhere in ~/.mopem/install, depending on which mono version is currently being used.
+
 
 ##PREREQUISITES
 
 You will need:
-* ruby 1.8.7 or better 
-* the versionomy ruby gem.
+1. ruby 1.8.7 or better 
+2. the versionomy ruby gem.
 
 ##SETUP
 
