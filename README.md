@@ -1,10 +1,13 @@
-Mopem is a Mono parallel environment manager, allowing the user to switch easily between different mono versions. Mopem can be used to install a new environment by tracking the proper branch in the mono repository, dependencies and downloading the needed source, compiling it and installing it in /home. It can then switch environments by changing environment variables and path.
+Mopem is a Mono parallel environment manager, allowing the user to switch easily between different mono versions. Mopem can be used to install a new environment by tracking the proper branch in the mono repository, dependencies and downloading the needed source, compiling it and installing it in your ~/.mopem directory. It can then switch environments by changing environment variables and your path.
 
-It also allows users to compile and install mono compatible projects from source and install them in a sandboxed mono version.
+It also allows users to compile and install mono compatible projects from source and install them in a sandboxed mono environment.
+
 
 ##PREREQUISITES
 
-You will need ruby 1.8.7 or better and the versionomy gem.
+You will need:
+* ruby 1.8.7 or better 
+* the versionomy ruby gem.
 
 ##SETUP
 
@@ -16,32 +19,35 @@ and change [cloned repo location] with the location where you cloned the repo.
 
 ##USAGE
 
-list all the available targets that can be installed
+To list all the available targets that can be installed:
 
     $ mopem list 
 
-install the latest in the 2.10 branch
+To install a target (mono, or any other target that shows up in the list above), type
+    $ mopem install [target] [target_version]
+
+For example, to install the latest mono from the 2.10 git branch:
 
     $ mopem install mono 2.10-HEAD
 
-install the 2.10.5 version from 2.10.5
+To install the 2.10.8 version of mono from the official tarball:
 
-    $ mopem install mono 2.10.5
+    $ mopem install mono 2.10.8
 
-install the HEAD version in the master branch
+To install the latest mono from the HEAD of the master git branch:
 
     $ mopem install mono master-HEAD
 
-install gtk-sharp version 2.12.11. Note: you must have selected a mono runtime first.
+To install gtk-sharp version 2.12.11. (Note: you must be using a mono runtime first with the use command. See below):
 
     $ mopem install gtk-sharp 2.12.11
 
-update the branch
+To update your current 2.10-HEAD version of mono:
 
     $ mopem update 2.10-HEAD
 
-switch to the selected environments by launching a new shell withing the existing one. I plan to replace the current shell at some point, but this isn't what it's doing at the moment.
+To switch to a new mono environment, you will need the use command to specify which version of mono you want to switch to. Note that you will need to have installed that specific mono version first with the install command.
 
     $ mopem use 2.10-HEAD
     $ mopem use master-HEAD
-    $ mopem use 2.10.5
+    $ mopem use 2.10.8
