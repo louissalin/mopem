@@ -135,6 +135,10 @@ class TargetFetcher
 			return filename[0..filename.length - 8]
 		end
 
+		if filename =~ /.zip$/
+			return filename[0..filename.length - 5]
+		end
+
 		''
 	end
 
@@ -145,6 +149,10 @@ class TargetFetcher
 
 		if filename =~ /.tar.gz$/
 			return 'tar xvzf'
+		end
+
+		if filename =~ /.zip$/
+			return 'unzip'
 		end
 
 		''
